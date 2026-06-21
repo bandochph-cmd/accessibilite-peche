@@ -1,0 +1,496 @@
+<!-- 🟩 FICHIER : web/formulaire-pmr.html -->
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Référencer un hébergement PMR</title>
+
+  <style>
+    /* 🟩============================================================
+       🟩 FORMULAIRE PUBLIC PMR
+       🟢 Valeurs visuelles modifiables.
+       🟩============================================================ */
+
+    :root {
+      --primary: #1667b7; /* 🟢 modifiable */
+      --primary-dark: #0d4f91; /* 🟢 modifiable */
+      --background: #f3f7fb; /* 🟢 modifiable */
+      --card: #ffffff; /* 🟢 modifiable */
+      --text: #1d2733; /* 🟢 modifiable */
+      --muted: #5e6b78; /* 🟢 modifiable */
+      --border: #d8e1ea; /* 🟢 modifiable */
+      --error: #b42318; /* 🟢 modifiable */
+      --success: #027a48; /* 🟢 modifiable */
+      --radius: 18px; /* 🟢 modifiable */
+      --shadow: 0 12px 32px rgba(15, 35, 55, 0.12); /* 🟢 modifiable */
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #eaf4ff 0%, var(--background) 48%);
+    }
+
+    .page {
+      width: min(940px, 100%);
+      margin: 0 auto;
+      padding: 28px 16px 48px; /* 🟢 modifiable */
+    }
+
+    .hero {
+      margin-bottom: 18px; /* 🟢 modifiable */
+      text-align: center;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(26px, 4vw, 40px); /* 🟢 modifiable */
+      line-height: 1.12;
+      color: var(--primary-dark);
+    }
+
+    .hero p {
+      margin: 0 auto;
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 16px; /* 🟢 modifiable */
+      line-height: 1.55;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px; /* 🟢 modifiable */
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px; /* 🟢 modifiable */
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px; /* 🟢 modifiable */
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-weight: 700;
+      font-size: 14px; /* 🟢 modifiable */
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px; /* 🟢 modifiable */
+      line-height: 1.35;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 12px; /* 🟢 modifiable */
+      padding: 12px 13px; /* 🟢 modifiable */
+      font-size: 15px; /* 🟢 modifiable */
+      font-family: inherit;
+      color: var(--text);
+      background: #ffffff;
+    }
+
+    textarea {
+      min-height: 132px; /* 🟢 modifiable */
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: 3px solid rgba(22, 103, 183, 0.16); /* 🟢 modifiable */
+      border-color: var(--primary);
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px; /* 🟢 modifiable */
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fbfdff;
+    }
+
+    .checkbox input {
+      width: 20px; /* 🟢 modifiable */
+      height: 20px; /* 🟢 modifiable */
+      margin-top: 1px;
+      flex: 0 0 auto;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px; /* 🟢 modifiable */
+      align-items: center;
+      justify-content: flex-start;
+      margin-top: 18px; /* 🟢 modifiable */
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 13px 22px; /* 🟢 modifiable */
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 800;
+      font-size: 15px; /* 🟢 modifiable */
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: var(--primary-dark);
+    }
+
+    button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .message {
+      display: none;
+      margin-top: 16px; /* 🟢 modifiable */
+      padding: 13px 14px; /* 🟢 modifiable */
+      border-radius: 12px;
+      line-height: 1.45;
+      font-weight: 700;
+    }
+
+    .message.success {
+      display: block;
+      color: var(--success);
+      background: #ecfdf3;
+      border: 1px solid #abefc6;
+    }
+
+    .message.error {
+      display: block;
+      color: var(--error);
+      background: #fef3f2;
+      border: 1px solid #fecdca;
+    }
+
+    .footer-note {
+      margin-top: 14px; /* 🟢 modifiable */
+      color: var(--muted);
+      font-size: 13px; /* 🟢 modifiable */
+      line-height: 1.5;
+    }
+
+    @media (max-width: 720px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 16px; /* 🟢 modifiable */
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <section class="hero">
+      <h1>Référencer gratuitement votre hébergement PMR</h1>
+      <p>
+        Ce formulaire permet de proposer un camping, hôtel ou gîte accessible PMR
+        afin qu’il soit vérifié avant publication dans l’application.
+      </p>
+    </section>
+
+    <section class="card" aria-label="Formulaire de référencement PMR">
+      <form id="pmrForm">
+        <div class="grid">
+          <div class="field full">
+            <label for="title">Nom de l’établissement *</label>
+            <input
+              id="title"
+              name="title"
+              type="text"
+              maxlength="120"
+              required
+              autocomplete="organization"
+              placeholder="Ex : Camping du Lac"
+            />
+          </div>
+
+          <div class="field">
+            <label for="type">Type d’hébergement *</label>
+            <select id="type" name="type" required>
+              <option value="">Choisir</option>
+              <option value="camping">Camping</option>
+              <option value="hotel">Hôtel</option>
+              <option value="gite">Gîte</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="rating">Note *</label>
+            <select id="rating" name="rating" required>
+              <option value="">Choisir</option>
+              <option value="1">1 / 5</option>
+              <option value="2">2 / 5</option>
+              <option value="3">3 / 5</option>
+              <option value="4">4 / 5</option>
+              <option value="5">5 / 5</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label for="source_url">Site web HTTPS *</label>
+            <input
+              id="source_url"
+              name="source_url"
+              type="url"
+              required
+              inputmode="url"
+              placeholder="https://www.exemple.fr"
+            />
+            <div class="hint">Le lien doit commencer par https://</div>
+          </div>
+
+          <div class="field">
+            <label for="latitude">Latitude *</label>
+            <input
+              id="latitude"
+              name="latitude"
+              type="number"
+              step="0.000001"
+              min="-90"
+              max="90"
+              required
+              placeholder="Ex : 45.123456"
+            />
+          </div>
+
+          <div class="field">
+            <label for="longitude">Longitude *</label>
+            <input
+              id="longitude"
+              name="longitude"
+              type="number"
+              step="0.000001"
+              min="-180"
+              max="180"
+              required
+              placeholder="Ex : 3.123456"
+            />
+          </div>
+
+          <div class="field full">
+            <label for="comment">Description PMR *</label>
+            <textarea
+              id="comment"
+              name="comment"
+              maxlength="500"
+              required
+              placeholder="Décrivez brièvement l’accessibilité PMR : accès, sanitaires, chambre, emplacement, circulation..."
+            ></textarea>
+            <div class="hint"><span id="counter">0</span>/500 caractères</div>
+          </div>
+
+          <div class="field full">
+            <label for="photo">Photo obligatoire *</label>
+            <input
+              id="photo"
+              name="photo"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              required
+            />
+            <div class="hint">Formats acceptés : JPG, PNG, WEBP. Taille maximum : 5 Mo.</div>
+          </div>
+
+          <div class="field full">
+            <label class="checkbox">
+              <input id="pmr_confirmed" name="pmr_confirmed" type="checkbox" required />
+              <span>Je confirme que l’établissement dispose d’un accès ou d’un hébergement adapté PMR.</span>
+            </label>
+          </div>
+
+          <div class="field full">
+            <label class="checkbox">
+              <input id="publication_consent" name="publication_consent" type="checkbox" required />
+              <span>J’autorise l’utilisation des informations transmises pour vérification et publication éventuelle dans l’application.</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="submitButton" type="submit">Envoyer la demande</button>
+          <span class="hint">La demande sera vérifiée avant publication.</span>
+        </div>
+
+        <div id="message" class="message" role="status" aria-live="polite"></div>
+
+        <p class="footer-note">
+          Les informations envoyées ne sont pas publiées automatiquement.
+          Elles passent d’abord en modération.
+        </p>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    // 🟩============================================================
+    // 🟩 CONFIGURATION
+    // 🟢 URL Edge Function Supabase.
+    // 🟢 Modifiable si le projet Supabase change.
+    // 🟩============================================================
+    const EDGE_FUNCTION_URL =
+      "https://zentyfamwemsyeqcbwle.supabase.co/functions/v1/submit-nearby-place-pmr";
+
+    const MAX_PHOTO_BYTES = 5 * 1024 * 1024; // 🟢 modifiable : 5 Mo
+    const MAX_COMMENT_LENGTH = 500; // 🟢 modifiable
+
+    const form = document.getElementById("pmrForm");
+    const submitButton = document.getElementById("submitButton");
+    const message = document.getElementById("message");
+    const comment = document.getElementById("comment");
+    const counter = document.getElementById("counter");
+
+    // 🟩============================================================
+    // 🟩 PRÉREMPLISSAGE VIA PARAMÈTRES URL
+    // 🟢 Utile pour les liens envoyés par e-mail.
+    // 🟢 Exemple :
+    // 🟢 formulaire-pmr.html?title=Camping&lat=45.1&lng=3.2&type=camping
+    // 🟩============================================================
+    const params = new URLSearchParams(window.location.search);
+
+    const prefillMap = {
+      title: "title",
+      type: "type",
+      source_url: "source_url",
+      url: "source_url",
+      latitude: "latitude",
+      lat: "latitude",
+      longitude: "longitude",
+      lng: "longitude",
+      rating: "rating",
+    };
+
+    for (const [paramName, inputName] of Object.entries(prefillMap)) {
+      const value = params.get(paramName);
+
+      if (!value) continue;
+
+      const input = document.querySelector(`[name="${inputName}"]`);
+
+      if (input) {
+        input.value = value;
+      }
+    }
+
+    function setMessage(kind, text) {
+      message.className = `message ${kind}`;
+      message.textContent = text;
+    }
+
+    function clearMessage() {
+      message.className = "message";
+      message.textContent = "";
+    }
+
+    function updateCounter() {
+      counter.textContent = String(comment.value.length);
+    }
+
+    comment.addEventListener("input", updateCounter);
+    updateCounter();
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearMessage();
+
+      const photo = document.getElementById("photo").files[0];
+
+      if (!photo) {
+        setMessage("error", "Une photo est obligatoire.");
+        return;
+      }
+
+      if (photo.size > MAX_PHOTO_BYTES) {
+        setMessage("error", "La photo est trop lourde. Maximum autorisé : 5 Mo.");
+        return;
+      }
+
+      if (comment.value.length > MAX_COMMENT_LENGTH) {
+        setMessage("error", "La description dépasse 500 caractères.");
+        return;
+      }
+
+      submitButton.disabled = true;
+      submitButton.textContent = "Envoi en cours...";
+
+      try {
+        const formData = new FormData(form);
+
+        // 🟢 Les checkboxes doivent être explicites côté serveur.
+        formData.set(
+          "pmr_confirmed",
+          document.getElementById("pmr_confirmed").checked ? "true" : "false",
+        );
+
+        formData.set(
+          "publication_consent",
+          document.getElementById("publication_consent").checked ? "true" : "false",
+        );
+
+        const response = await fetch(EDGE_FUNCTION_URL, {
+          method: "POST",
+          body: formData,
+        });
+
+        const data = await response.json().catch(() => ({
+          ok: false,
+          message: "Réponse serveur illisible.",
+        }));
+
+        if (!response.ok || !data.ok) {
+          throw new Error(data.message || "Envoi impossible.");
+        }
+
+        setMessage(
+          "success",
+          "Demande envoyée. Elle sera vérifiée avant publication.",
+        );
+
+        form.reset();
+        updateCounter();
+      } catch (error) {
+        setMessage(
+          "error",
+          error instanceof Error ? error.message : "Erreur inconnue.",
+        );
+      } finally {
+        submitButton.disabled = false;
+        submitButton.textContent = "Envoyer la demande";
+      }
+    });
+  </script>
+</body>
+</html>
