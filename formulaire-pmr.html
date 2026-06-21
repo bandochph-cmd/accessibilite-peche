@@ -214,24 +214,36 @@
 
 
 
+
     /* 🟩============================================================
        🟩 PATCH ZZZ — TITRE AJUSTÉ + ICÔNES HERO SANS FILIGRANE
-       🟢 Modifiable : taille titre, taille icônes, espace au-dessus de la tuile.
+       🟢 Modifiable : taille titre, taille icônes, espace hero/tuile.
        🟩============================================================ */
 
     .hero {
-      max-width: 940px; /* 🟢 modifiable : même largeur que la page/tuile */
+      max-width: 940px; /* 🟢 modifiable : largeur alignée avec la grosse tuile blanche */
       margin-left: auto;
       margin-right: auto;
-      margin-bottom: 12px; /* 🟢 modifiable */
+      margin-bottom: 22px; /* 🟢 modifiable : espace entre bloc haut et grosse tuile */
       padding-left: 0;
       padding-right: 0;
       text-align: center;
     }
 
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 96px minmax(0, 1fr) 96px; /* 🟢 modifiable : largeur des colonnes icônes */
+      column-gap: 16px; /* 🟢 modifiable */
+      align-items: end; /* 🟢 place les icônes au niveau du texte d’introduction */
+    }
+
+    .hero-text {
+      min-width: 0;
+      text-align: center;
+    }
+
     .hero h1 {
       width: 100%;
-      max-width: 940px; /* 🟢 modifiable : alignement avec la tuile blanche */
       margin: 0 auto 10px;
       text-align: center;
       white-space: nowrap; /* 🟢 garde PMR sur la même ligne */
@@ -249,17 +261,6 @@
       margin-right: auto;
     }
 
-    .hero-icon-row {
-      max-width: 940px; /* 🟢 modifiable : même largeur que la tuile */
-      height: 96px; /* 🟢 modifiable : réserve l'espace réel pour les icônes */
-      margin: 0 auto 8px; /* 🟢 modifiable : espace entre icônes et tuile */
-      padding: 0 12px; /* 🟢 modifiable */
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      pointer-events: none;
-    }
-
     .hero-side-icon {
       width: 88px; /* 🟢 modifiable : taille validée */
       height: 88px; /* 🟢 modifiable : taille validée */
@@ -269,6 +270,16 @@
       background-position: center;
       background-size: contain;
       opacity: 0.92; /* 🟢 modifiable */
+      pointer-events: none;
+      margin-bottom: -2px; /* 🟢 modifiable : rapproche légèrement du texte sans toucher la tuile */
+    }
+
+    .hero-side-icon-left {
+      justify-self: start;
+    }
+
+    .hero-side-icon-right {
+      justify-self: end;
     }
 
     .card {
@@ -289,8 +300,9 @@
     }
 
     @media (max-width: 1100px) {
-      .hero-icon-row {
-        height: 90px; /* 🟢 modifiable */
+      .hero-layout {
+        grid-template-columns: 88px minmax(0, 1fr) 88px; /* 🟢 modifiable */
+        column-gap: 12px; /* 🟢 modifiable */
       }
 
       .hero-side-icon {
@@ -304,14 +316,14 @@
     }
 
     @media (max-width: 900px) {
-      .hero-icon-row {
-        height: 76px; /* 🟢 modifiable */
-        padding: 0;
+      .hero-layout {
+        grid-template-columns: 70px minmax(0, 1fr) 70px; /* 🟢 modifiable */
+        column-gap: 8px; /* 🟢 modifiable */
       }
 
       .hero-side-icon {
-        width: 68px; /* 🟢 modifiable */
-        height: 68px; /* 🟢 modifiable */
+        width: 64px; /* 🟢 modifiable */
+        height: 64px; /* 🟢 modifiable */
       }
 
       .hero h1 {
@@ -320,8 +332,12 @@
     }
 
     @media (max-width: 760px) {
-      .hero-icon-row {
-        display: none; /* 🟢 sur mobile, on retire les icônes pour éviter l'overflow */
+      .hero-layout {
+        display: block;
+      }
+
+      .hero-side-icon {
+        display: none; /* 🟢 pas d’icônes sur mobile pour éviter les débordements */
       }
 
       .hero h1 {
@@ -336,23 +352,27 @@
 
 
 
+
   </style>
 </head>
 
 <body>
   <main class="page">
     <section class="hero">
-      <h1>Référencer gratuitement votre hébergement <span class="hero-title-pmr">PMR</span></h1>
-      <p>
-        Ce formulaire permet de proposer un camping, hôtel ou gîte accessible PMR
-        afin qu’il soit vérifié avant publication dans l’application.
-      </p>
-    </section>
+      <div class="hero-layout" aria-label="Présentation du formulaire">
+        <span class="hero-side-icon hero-side-icon-left" aria-hidden="true"></span>
 
-    <div class="hero-icon-row" aria-hidden="true">
-      <span class="hero-side-icon hero-side-icon-left"></span>
-      <span class="hero-side-icon hero-side-icon-right"></span>
-    </div>
+        <div class="hero-text">
+          <h1>Référencer gratuitement votre hébergement <span class="hero-title-pmr">PMR</span></h1>
+          <p>
+            Ce formulaire permet de proposer un camping, hôtel ou gîte accessible PMR
+            afin qu’il soit vérifié avant publication dans l’application.
+          </p>
+        </div>
+
+        <span class="hero-side-icon hero-side-icon-right" aria-hidden="true"></span>
+      </div>
+    </section>
 
     <section class="card" aria-label="Formulaire de référencement PMR">
       <form id="pmrForm">
