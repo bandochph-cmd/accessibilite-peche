@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "fr.accesspeche.app",
+      "sha256_cert_fingerprints": [
+        "8C:26:DB:66:1A:2E:B6:B3:F7:88:45:4E:E5:8A:E8:7A:28:30:AD:57:43:26:FD:4B:9A:1D:27:E9:D0:21:A2:5D"
+      ]
+    }
+  }
+]
