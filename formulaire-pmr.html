@@ -243,7 +243,7 @@
       margin: 0 auto;
       text-align: center;
       white-space: nowrap; /* 🟢 garde PMR sur la même ligne */
-      font-size: clamp(24px, 2.25vw, 32px); /* 🟢 modifiable : titre réduit */
+      font-size: clamp(27px, 2.625vw, 37px); /* 🟢 modifiable : titre taille intermédiaire */
       line-height: 1.08; /* 🟢 modifiable */
       letter-spacing: -0.012em; /* 🟢 modifiable */
     }
@@ -316,7 +316,7 @@
 
     @media (max-width: 1100px) {
       .hero h1 {
-        font-size: clamp(24px, 2.35vw, 31px); /* 🟢 modifiable */
+        font-size: clamp(26px, 2.8vw, 35px); /* 🟢 modifiable : titre taille intermédiaire */
       }
 
       .hero-intro-row {
@@ -332,7 +332,7 @@
 
     @media (max-width: 900px) {
       .hero h1 {
-        font-size: clamp(23px, 3vw, 30px); /* 🟢 modifiable */
+        font-size: clamp(25px, 3.5vw, 33px); /* 🟢 modifiable : titre taille intermédiaire */
       }
 
       .hero-intro-row {
@@ -461,6 +461,23 @@
             <div class="hint">Le lien doit commencer par https://</div>
           </div>
 
+          <div class="field full">
+            <label for="contact_email">Email de contact *</label>
+            <input
+              id="contact_email"
+              name="contact_email"
+              type="email"
+              required
+              inputmode="email"
+              autocomplete="email"
+              placeholder="contact@exemple.fr"
+            />
+            <div class="hint">
+              <!-- 🟢 Utilisé pour informer le propriétaire après validation ou refus admin. -->
+              Utilisé uniquement pour vous informer de la validation ou du refus de votre demande.
+            </div>
+          </div>
+
           <div class="field">
             <label for="latitude">Latitude *</label>
             <input
@@ -510,7 +527,12 @@
               accept="image/jpeg,image/png,image/webp"
               required
             />
-            <div class="hint">Formats acceptés : JPG, PNG, WEBP. Taille maximum : 5 Mo.</div>
+            <div class="hint">
+              Formats acceptés : JPG, PNG, WEBP. Taille maximum : 5 Mo.<br />
+              <!-- 🟢 Avertissement confidentialité photo : visible par l’utilisateur avant envoi. -->
+              Important : la photo ne doit pas contenir de visage identifiable, de plaque d’immatriculation,
+              de document personnel ou d’information privée.
+            </div>
           </div>
 
           <div class="field full">
@@ -574,6 +596,8 @@
       type: "type",
       source_url: "source_url",
       url: "source_url",
+      contact_email: "contact_email",
+      email: "contact_email",
       latitude: "latitude",
       lat: "latitude",
       longitude: "longitude",
