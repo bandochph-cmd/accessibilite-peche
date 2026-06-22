@@ -384,6 +384,28 @@
 
 
 
+  
+    /* 🟩 Ligne compacte : type / note / email */
+    /* 🟢 Modifiable : ratios desktop 25% / 25% / 50%. */
+    .type-rating-email-row {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 1fr 1fr 2fr;
+      gap: 14px; /* 🟢 modifiable */
+      align-items: start;
+    }
+
+    .type-rating-email-row .field {
+      min-width: 0;
+    }
+
+    @media (max-width: 760px) {
+      /* 🟢 Mobile : empile les 3 champs pour éviter tout overflow. */
+      .type-rating-email-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
   </style>
 </head>
 
@@ -426,7 +448,8 @@
             />
           </div>
 
-          <div class="field">
+          <div class="type-rating-email-row">
+            <div class="field">
             <label for="type">Type d’hébergement *</label>
             <select id="type" name="type" required>
               <option value="">Choisir</option>
@@ -436,7 +459,7 @@
             </select>
           </div>
 
-          <div class="field">
+            <div class="field">
             <label for="rating">Note *</label>
             <select id="rating" name="rating" required>
               <option value="">Choisir</option>
@@ -446,6 +469,24 @@
               <option value="4">4 / 5</option>
               <option value="5">5 / 5</option>
             </select>
+          </div>
+
+            <div class="field">
+              <label for="contact_email">Email de contact *</label>
+              <input
+                id="contact_email"
+                name="contact_email"
+                type="email"
+                required
+                inputmode="email"
+                autocomplete="email"
+                placeholder="contact@exemple.fr"
+              />
+              <div class="hint">
+                <!-- 🟢 Utilisé uniquement pour informer le propriétaire après validation ou refus admin. -->
+                Utilisé uniquement pour vous informer de la validation ou du refus de votre demande.
+              </div>
+            </div>
           </div>
 
           <div class="field full">
@@ -459,23 +500,6 @@
               placeholder="https://www.exemple.fr"
             />
             <div class="hint">Le lien doit commencer par https://</div>
-          </div>
-
-          <div class="field full">
-            <label for="contact_email">Email de contact *</label>
-            <input
-              id="contact_email"
-              name="contact_email"
-              type="email"
-              required
-              inputmode="email"
-              autocomplete="email"
-              placeholder="contact@exemple.fr"
-            />
-            <div class="hint">
-              <!-- 🟢 Utilisé pour informer le propriétaire après validation ou refus admin. -->
-              Utilisé uniquement pour vous informer de la validation ou du refus de votre demande.
-            </div>
           </div>
 
           <div class="field">
