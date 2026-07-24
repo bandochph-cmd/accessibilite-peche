@@ -385,12 +385,12 @@
 
 
   
-    /* 🟩 Ligne compacte : type / note / email */
-    /* 🟢 Modifiable : ratios desktop 25% / 25% / 50%. */
+    /* 🟩 Ligne compacte : type / email */
+    /* 🟢 Modifiable : ratios desktop 35% / 65%. */
     .type-rating-email-row {
       grid-column: 1 / -1;
       display: grid;
-      grid-template-columns: 1fr 1fr 2fr;
+      grid-template-columns: 1fr 2fr;
       gap: 14px; /* 🟢 modifiable */
       align-items: start;
     }
@@ -400,7 +400,7 @@
     }
 
     @media (max-width: 760px) {
-      /* 🟢 Mobile : empile les 3 champs pour éviter tout overflow. */
+      /* 🟢 Mobile : empile les champs pour éviter tout overflow. */
       .type-rating-email-row {
         grid-template-columns: 1fr;
       }
@@ -460,18 +460,6 @@
           </div>
 
             <div class="field">
-            <label for="rating">Note *</label>
-            <select id="rating" name="rating" required>
-              <option value="">Choisir</option>
-              <option value="1">1 / 5</option>
-              <option value="2">2 / 5</option>
-              <option value="3">3 / 5</option>
-              <option value="4">4 / 5</option>
-              <option value="5">5 / 5</option>
-            </select>
-          </div>
-
-            <div class="field">
               <label for="contact_email">Email de contact *</label>
               <input
                 id="contact_email"
@@ -497,9 +485,13 @@
               type="url"
               required
               inputmode="url"
-              placeholder="https://www.exemple.fr"
+              placeholder="Exemple : https://www.nom-du-camping.fr"
             />
-            <div class="hint">Le lien doit commencer par https://</div>
+            <div class="hint">
+              Indiquez le site officiel de votre établissement, ou à défaut une page publique fiable :
+              Google, Pages Jaunes, office de tourisme, réseau de camping, etc.
+              Le lien doit commencer par https://
+            </div>
           </div>
 
           <div class="field">
@@ -618,15 +610,12 @@
     const prefillMap = {
       title: "title",
       type: "type",
-      source_url: "source_url",
-      url: "source_url",
       contact_email: "contact_email",
       email: "contact_email",
       latitude: "latitude",
       lat: "latitude",
       longitude: "longitude",
       lng: "longitude",
-      rating: "rating",
     };
 
     for (const [paramName, inputName] of Object.entries(prefillMap)) {
