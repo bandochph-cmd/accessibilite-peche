@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Accessibilité Pêche — application dédiée à l'accessibilité des lieux de pêche et des hébergements PMR."
+  >
+
+  <title>Accessibilité Pêche</title>
+
+  <style>
+    /* 🟩 =========================================================
+       🟩 VARIABLES VISUELLES
+       🟩 ========================================================= */
+
+    :root {
+      --primary: #0d4f8b; /* 🟢 Bleu principal — modifiable */
+      --primary-dark: #08365f; /* 🟢 Bleu foncé — modifiable */
+      --accent: #f28c28; /* 🟢 Orange accent — modifiable */
+      --background: #f5f9fc; /* 🟢 Fond général — modifiable */
+      --surface: #ffffff; /* 🟢 Fond cartes — modifiable */
+      --text: #17324d; /* 🟢 Texte principal — modifiable */
+      --muted: #5f7080; /* 🟢 Texte secondaire — modifiable */
+      --border: #dbe7f0; /* 🟢 Bordures — modifiable */
+      --shadow: 0 12px 30px rgba(13, 79, 139, 0.12); /* 🟢 Ombre — modifiable */
+      --radius: 18px; /* 🟢 Arrondi général — modifiable */
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+      color: var(--text);
+      background:
+        linear-gradient(
+          180deg,
+          #eef7fd 0%,
+          var(--background) 42%,
+          #ffffff 100%
+        );
+    }
+
+    a {
+      color: inherit;
+    }
+
+    /* 🟩 =========================================================
+       🟩 CONTENEUR PRINCIPAL
+       🟩 ========================================================= */
+
+    .page {
+      width: min(1120px, calc(100% - 32px)); /* 🟢 Largeur max — modifiable */
+      margin: 0 auto;
+      padding:
+        40px 0 28px; /* 🟢 Espacements verticaux — modifiable */
+    }
+
+    /* 🟩 =========================================================
+       🟩 EN-TÊTE
+       🟩 ========================================================= */
+
+    .hero {
+      text-align: center;
+      padding:
+        28px 20px 34px; /* 🟢 Padding hero — modifiable */
+    }
+
+    .logo {
+      display: block;
+      width: min(220px, 62vw); /* 🟢 Taille logo — modifiable */
+      height: auto;
+      margin: 0 auto 22px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size:
+        clamp(2rem, 6vw, 3.6rem); /* 🟢 Taille titre — modifiable */
+      line-height: 1.05;
+      color: var(--primary);
+    }
+
+    .subtitle {
+      margin:
+        16px auto 0;
+      max-width: 760px;
+      font-size:
+        clamp(1.05rem, 2.7vw, 1.35rem); /* 🟢 Taille — modifiable */
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    /* 🟩 =========================================================
+       🟩 ÉTAT DU PROJET
+       🟩 ========================================================= */
+
+    .status-card {
+      max-width: 850px;
+      margin:
+        0 auto 28px;
+      padding:
+        24px; /* 🟢 Padding — modifiable */
+      background: var(--surface);
+      border:
+        1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding:
+        8px 14px; /* 🟢 Padding badge — modifiable */
+      margin-bottom: 14px;
+      border-radius: 999px;
+      background:
+        rgba(242, 140, 40, 0.14); /* 🟢 Opacité — modifiable */
+      color: #9a530d;
+      font-weight: 700;
+    }
+
+    .status-card h2 {
+      margin:
+        0 0 12px;
+      color: var(--primary-dark);
+      font-size:
+        clamp(1.35rem, 3vw, 1.8rem); /* 🟢 Taille — modifiable */
+    }
+
+    .status-card p {
+      margin:
+        8px auto;
+      max-width: 720px;
+      line-height: 1.65;
+      color: var(--muted);
+    }
+
+    .release {
+      margin-top: 16px !important;
+      font-weight: 700;
+      color: var(--primary) !important;
+    }
+
+    /* 🟩 =========================================================
+       🟩 ACTION PRINCIPALE
+       🟩 ========================================================= */
+
+    .main-action {
+      display: flex;
+      justify-content: center;
+      margin:
+        30px 0 36px;
+    }
+
+    .primary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px; /* 🟢 Hauteur — modifiable */
+      padding:
+        0 24px; /* 🟢 Padding horizontal — modifiable */
+      border-radius: 14px; /* 🟢 Arrondi — modifiable */
+      background: var(--primary);
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow:
+        0 8px 22px rgba(13, 79, 139, 0.24); /* 🟢 Ombre — modifiable */
+      transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease;
+    }
+
+    .primary-button:hover {
+      transform: translateY(-2px);
+      box-shadow:
+        0 12px 28px rgba(13, 79, 139, 0.3);
+    }
+
+    .primary-button:focus-visible {
+      outline:
+        3px solid rgba(242, 140, 40, 0.45);
+      outline-offset: 4px;
+    }
+
+    /* 🟩 =========================================================
+       🟩 STORES
+       🟩 ========================================================= */
+
+    .stores-section {
+      margin:
+        18px 0 42px;
+    }
+
+    .stores-section h2 {
+      margin:
+        0 0 18px;
+      text-align: center;
+      color: var(--primary-dark);
+    }
+
+    .stores-grid {
+      display: grid;
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+      gap:
+        18px; /* 🟢 Espacement — modifiable */
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .store-card {
+      min-height: 150px; /* 🟢 Hauteur minimale — modifiable */
+      padding:
+        24px; /* 🟢 Padding — modifiable */
+      background: var(--surface);
+      border:
+        1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .store-title {
+      margin:
+        0 0 10px;
+      font-size:
+        1.2rem; /* 🟢 Taille — modifiable */
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .store-status {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* 🟩 =========================================================
+       🟩 CONTACT
+       🟩 ========================================================= */
+
+    .contact-card {
+      max-width: 760px;
+      margin:
+        0 auto 32px;
+      padding:
+        22px; /* 🟢 Padding — modifiable */
+      background:
+        rgba(13, 79, 139, 0.07); /* 🟢 Fond — modifiable */
+      border:
+        1px solid rgba(13, 79, 139, 0.15);
+      border-radius: var(--radius);
+      text-align: center;
+    }
+
+    .contact-card h2 {
+      margin:
+        0 0 10px;
+      color: var(--primary-dark);
+    }
+
+    .contact-card a {
+      color: var(--primary);
+      font-weight: 700;
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+
+    .contact-card a:hover {
+      text-decoration: underline;
+    }
+
+    /* 🟩 =========================================================
+       🟩 PIED DE PAGE
+       🟩 ========================================================= */
+
+    footer {
+      padding:
+        22px 12px 8px; /* 🟢 Padding — modifiable */
+      text-align: center;
+      color: var(--muted);
+      font-size:
+        0.92rem; /* 🟢 Taille — modifiable */
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap:
+        12px 20px; /* 🟢 Espacement — modifiable */
+      margin-bottom: 14px;
+    }
+
+    .footer-links a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    /* 🟩 =========================================================
+       🟩 RESPONSIVE
+       🟩 ========================================================= */
+
+    @media (max-width: 700px) {
+      .page {
+        width:
+          min(100% - 20px, 1120px); /* 🟢 Marges mobile — modifiable */
+        padding-top:
+          20px; /* 🟢 Padding haut mobile — modifiable */
+      }
+
+      .hero {
+        padding:
+          18px 12px 26px; /* 🟢 Padding mobile — modifiable */
+      }
+
+      .stores-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .status-card,
+      .store-card,
+      .contact-card {
+        border-radius:
+          15px; /* 🟢 Arrondi mobile — modifiable */
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+
+    <!-- 🟩 =======================================================
+         🟩 EN-TÊTE / IDENTITÉ
+         🟩 ======================================================= -->
+    <section class="hero">
+      <img
+        class="logo"
+        src="assets/images/logo_bleu_appli_1.png"
+        alt="Logo Accessibilité Pêche"
+      >
+
+      <h1>Accessibilité Pêche</h1>
+
+      <p class="subtitle">
+        Une application pensée pour faciliter l’accès aux lieux de pêche
+        et aux services adaptés aux personnes à mobilité réduite.
+      </p>
+    </section>
+
+    <!-- 🟩 =======================================================
+         🟩 ÉTAT DE DÉVELOPPEMENT
+         🟩 ======================================================= -->
+    <section class="status-card">
+      <div class="status-badge">
+        Application en cours de développement
+      </div>
+
+      <h2>Le projet avance</h2>
+
+      <p>
+        Accessibilité Pêche a pour objectif de regrouper des informations
+        utiles sur les lieux de pêche accessibles et les services situés
+        à proximité.
+      </p>
+
+      <p>
+        Les hébergeurs peuvent également proposer un établissement
+        accessible PMR afin qu’il soit vérifié avant publication.
+      </p>
+
+      <p class="release">
+        Bientôt disponible au printemps 2027.
+      </p>
+    </section>
+
+    <!-- 🟩 =======================================================
+         🟩 FORMULAIRE PMR EXISTANT
+         🟩 ======================================================= -->
+    <div class="main-action">
+      <a
+        class="primary-button"
+        href="formulaire-pmr.html"
+      >
+        Proposer un hébergement accessible PMR
+      </a>
+    </div>
+
+    <!-- 🟩 =======================================================
+         🟩 APP STORE / GOOGLE PLAY
+         🟩 Les liens de téléchargement seront ajoutés uniquement
+         🟩 lorsque les fiches officielles seront publiées.
+         🟩 ======================================================= -->
+    <section class="stores-section">
+      <h2>Application mobile</h2>
+
+      <div class="stores-grid">
+
+        <article class="store-card">
+          <p class="store-title">
+            App Store
+          </p>
+
+          <p class="store-status">
+            Bientôt disponible sur iPhone.
+          </p>
+        </article>
+
+        <article class="store-card">
+          <p class="store-title">
+            Google Play
+          </p>
+
+          <p class="store-status">
+            Bientôt disponible sur Android.
+          </p>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- 🟩 =======================================================
+         🟩 CONTACT
+         🟩 ======================================================= -->
+    <section class="contact-card">
+      <h2>Contact</h2>
+
+      <a href="mailto:contact@accessibilite-peche.fr">
+        contact@accessibilite-peche.fr
+      </a>
+    </section>
+
+    <!-- 🟩 =======================================================
+         🟩 PIED DE PAGE
+         🟩 ======================================================= -->
+    <footer>
+      <nav
+        class="footer-links"
+        aria-label="Liens utiles"
+      >
+        <a href="support.html">
+          Support
+        </a>
+
+        <a href="confidentialite.html">
+          Confidentialité
+        </a>
+      </nav>
+
+      <div>
+        © 2026 Accessibilité Pêche
+      </div>
+    </footer>
+
+  </main>
+</body>
+</html>
