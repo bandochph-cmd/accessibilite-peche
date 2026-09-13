@@ -113,51 +113,121 @@
        🟩 ========================================================= */
 
     .status-card {
-      max-width: 850px;
+      position: relative;
+      max-width: 940px; /* 🟢 Largeur de la zone — modifiable */
       margin:
-        0 auto 12px; /* 🟢 Marge basse réduite — modifiable */
+        0 auto 8px; /* 🟢 Marge basse — modifiable */
       padding:
-        14px 22px; /* 🟢 Padding vertical réduit — modifiable */
-      background: var(--surface);
-      border:
-        1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+        38px 20px 8px; /* 🟢 Espacement vertical — modifiable */
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
       text-align: center;
+      overflow: visible;
     }
 
-    .status-badge {
-      display: inline-block;
-      padding:
-        8px 14px; /* 🟢 Padding badge — modifiable */
-      margin-bottom: 14px;
-      border-radius: 999px;
-      background:
-        rgba(242, 140, 40, 0.14); /* 🟢 Opacité — modifiable */
-      color: #9a530d;
-      font-weight: 700;
+    /* 🟩 Accroches orange sans tuile, fond ni contour */
+    .promo-ribbon {
+      position: absolute;
+      top:
+        -210px; /* 🟢 Position verticale — inchangée */
+      z-index: 2;
+      padding: 0;
+      color: var(--accent);
+      font-size:
+        2.14rem; /* 🟢 Typo accroches agrandie — modifiable */
+      font-weight: 900;
+      font-style: italic;
+      letter-spacing: 0.035em;
+      line-height: 1;
+      white-space: nowrap;
+      text-transform: uppercase;
+      text-shadow:
+        10px 10px 0 rgba(13, 79, 139, 0.16),
+        14px 14px 0 rgba(13, 79, 139, 0.10),
+        18px 18px 12px rgba(13, 79, 139, 0.08);
+      text-align: left;
+    }
+
+    .promo-ribbon-left {
+      left: -34px; /* 🟢 Sortie vers la gauche — modifiable */
+      transform: rotate(-14deg); /* 🟢 Inclinaison — modifiable */
+    }
+
+    .promo-ribbon-right {
+      right: -34px; /* 🟢 Sortie vers la droite — modifiable */
+      transform: rotate(14deg); /* 🟢 Inclinaison — modifiable */
     }
 
     .status-card h2 {
       margin:
-        0 0 12px;
+        0 0 6px;
       color: var(--primary-dark);
       font-size:
-        clamp(1.35rem, 3vw, 1.8rem); /* 🟢 Taille — modifiable */
+        clamp(1.45rem, 2.7vw, 1.95rem); /* 🟢 Taille — modifiable */
     }
 
     .status-card p {
       margin:
-        8px auto;
-      max-width: 720px;
-      line-height: 1.65;
+        5px auto;
+      max-width: 880px;
+      line-height:
+        1.34; /* 🟢 Interligne — modifiable */
       color: var(--muted);
     }
 
+    .status-lead {
+      max-width: none !important;
+      font-size:
+        0.96rem; /* 🟢 Taille — modifiable */
+      white-space: nowrap;
+    }
+
+    /* 🟩 Simple texte : aucune tuile */
+    .status-free {
+      margin-top:
+        9px !important; /* 🟢 Espacement — modifiable */
+      color: var(--accent) !important;
+      font-size:
+        0.98rem; /* 🟢 Taille — modifiable */
+      font-weight: 900;
+    }
+
+    .status-highlight {
+      color: var(--primary) !important;
+      font-weight: 800;
+    }
+
     .release {
-      margin-top: 16px !important;
+      margin-top:
+        7px !important; /* 🟢 Espacement — modifiable */
       font-weight: 700;
       color: var(--primary) !important;
+    }
+
+    /* 🟩 Responsive de la zone marketing */
+    @media (max-width: 980px) {
+      .status-lead {
+        white-space: normal;
+      }
+
+      .promo-ribbon {
+        font-size:
+          0.84rem; /* 🟢 Taille mobile/tablette — modifiable */
+      }
+
+      .promo-ribbon-left {
+        left: 4px; /* 🟢 Position responsive — modifiable */
+        transform:
+          rotate(-8deg); /* 🟢 Inclinaison responsive — modifiable */
+      }
+
+      .promo-ribbon-right {
+        right: 4px; /* 🟢 Position responsive — modifiable */
+        transform:
+          rotate(8deg); /* 🟢 Inclinaison responsive — modifiable */
+      }
     }
 
     /* 🟩 =========================================================
@@ -229,14 +299,13 @@
     }
 
     .store-card {
-      min-height: 112px; /* 🟢 Hauteur minimale réduite — modifiable */
+      min-height: auto;
       padding:
-        12px 18px; /* 🟢 Padding vertical réduit — modifiable */
-      background: var(--surface);
-      border:
-        1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+        2px 18px; /* 🟢 Espacement autour du badge — modifiable */
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      box-shadow: none;
       text-align: center;
     }
 
@@ -349,7 +418,535 @@
           15px; /* 🟢 Arrondi mobile — modifiable */
       }
     }
-  </style>
+      /* 🟩 LANDING OVERRIDES SEPTEMBRE 2026 — DÉBUT */
+
+    /* 🟩 =========================================================
+       🟩 LOGO PRINCIPAL
+       🟩 ========================================================= */
+
+    .logo {
+      width:
+        min(295px, 63vw) !important; /* 🟢 Logo très légèrement agrandi — modifiable */
+      height: auto !important;
+      margin:
+        0 auto 8px; /* 🟢 Marge sous le logo — modifiable */
+    }
+
+    /* 🟩 Sous-titre principal sur une seule ligne sur écran large */
+    .subtitle-single-line {
+      max-width: none !important;
+      margin:
+        8px auto -8px !important; /* 🟢 Réduit l’espace avant le bloc suivant — modifiable */
+      white-space: nowrap;
+    }
+
+    @media (max-width: 980px) {
+      .subtitle-single-line {
+        max-width: 760px !important;
+        margin:
+          8px auto 0 !important; /* 🟢 Marge responsive — modifiable */
+        white-space: normal;
+      }
+    }
+
+    /* 🟩 =========================================================
+       🟩 ZONE MARKETING
+       🟩 ========================================================= */
+
+    .status-card {
+      position: relative;
+      max-width: 980px;
+      margin:
+        18px auto 0; /* 🟢 Position générale — modifiable */
+      padding:
+        10px 20px 0; /* 🟢 Espacement — modifiable */
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      text-align: center;
+      overflow: visible;
+    }
+
+    /* 🟩 Accroches orange :
+       🟢 légèrement descendues
+       🟢 typographie agrandie
+       🟢 toujours écartées sur les côtés */
+    .promo-ribbon {
+      position: absolute;
+      top:
+        -210px; /* 🟢 Position verticale — modifiable */
+      z-index: 2;
+      padding: 0;
+      color: var(--accent);
+      font-size:
+        1.66rem; /* 🟢 Taille accroches légèrement augmentée — modifiable */
+      font-weight: 900;
+      font-style: italic;
+      letter-spacing: 0.035em;
+      line-height: 1;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+
+    .promo-ribbon-left {
+      left:
+        -90px; /* 🟢 Accroche davantage sortie vers la gauche — modifiable */
+      transform:
+        rotate(-16deg); /* 🟢 Inclinaison conservée — modifiable */
+      text-align: left;
+    }
+
+    /* 🟩 Deux lignes avec effet de décalage type tabulation */
+    .promo-ribbon > span {
+      display: block;
+    }
+
+    .promo-ribbon-indent,
+    .promo-ribbon-indent-right {
+      display: block;
+      margin-top:
+        2.16rem; /* 🟢 Espace doublé entre les 2 lignes — modifiable */
+      padding-left:
+        3rem; /* 🟢 Décalage horizontal identique gauche/droite — modifiable */
+    }
+
+    .france-tricolor {
+      display: inline-flex !important;
+      align-items: baseline;
+      gap: 0.02em;
+      white-space: nowrap;
+    }
+
+    .france-tricolor span {
+      display: inline !important;
+      line-height: 1;
+    }
+
+    .fr-blue {
+      color: #1d5fbf;
+    }
+
+    .fr-white-outline {
+      color: #ffffff;
+      -webkit-text-stroke: 1.2px var(--accent);
+      text-shadow:
+        -1px 0 var(--accent),
+        0 1px var(--accent),
+        1px 0 var(--accent),
+        0 -1px var(--accent);
+    }
+
+    .fr-red {
+      color: #d62828;
+    }
+
+    .promo-ribbon-right {
+      right:
+        -90px; /* 🟢 Accroche davantage sortie vers la droite — modifiable */
+      transform:
+        rotate(16deg); /* 🟢 Inclinaison conservée — modifiable */
+    }
+
+    /* 🟩 =========================================================
+       🟩 TEXTES CENTRAUX
+       🟩 ========================================================= */
+
+    .status-card h2 {
+      margin:
+        0 0 18px;
+      color: var(--primary-dark);
+      font-size:
+        clamp(1.85rem, 3.2vw, 2.45rem); /* 🟢 Taille — modifiable */
+      line-height: 1.2;
+    }
+
+    .status-card p {
+      margin:
+        14px auto;
+      max-width: 960px;
+      line-height:
+        1.65; /* 🟢 Interligne — modifiable */
+      font-size:
+        1.08rem; /* 🟢 Taille — modifiable */
+      color: var(--muted);
+    }
+
+    .status-lead {
+      max-width: none !important;
+      white-space: nowrap;
+      font-size:
+        1.08rem !important; /* 🟢 Taille — modifiable */
+    }
+
+    /* 🟩 Référencement gratuit davantage mis en avant */
+    .status-accent,
+    .status-free {
+      margin:
+        15px auto !important; /* 🟢 Espacement — modifiable */
+      color: var(--accent) !important;
+      font-size:
+        1.68rem !important; /* 🟢 Référencement gratuit légèrement agrandi — modifiable */
+      font-weight: 900;
+    }
+
+    .status-highlight {
+      margin:
+        14px auto !important;
+      color: var(--primary) !important;
+      font-size:
+        1.12rem !important; /* 🟢 Taille — modifiable */
+      font-weight: 800;
+    }
+
+    .release {
+      margin:
+        12px auto 0 !important; /* 🟢 Marge basse gérée par le CTA — modifiable */
+      color: var(--primary) !important;
+      font-size:
+        1.08rem !important; /* 🟢 Taille — modifiable */
+      font-weight: 700;
+    }
+
+    .benefit-pills,
+    .benefit-pill {
+      display: none !important;
+    }
+
+    /* 🟩 =========================================================
+       🟩 BOUTON PRINCIPAL
+       🟩 Espaces réduits autour du bouton.
+       🟩 ========================================================= */
+
+    .main-action {
+      margin:
+        26px 0 0 !important; /* 🟢 Lancement → bouton — modifiable */
+    }
+
+    /* 🟩 =========================================================
+       🟩 APP STORE / GOOGLE PLAY
+       🟩 ========================================================= */
+
+    .stores-section {
+      margin:
+        26px 0 0 !important; /* 🟢 Bouton → stores — modifiable */
+    }
+
+    .stores-grid {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap:
+        8px; /* 🟢 Écart entre badges — modifiable */
+      max-width: 280px;
+      margin: 0 auto;
+    }
+
+    .store-card {
+      min-height: auto !important;
+      padding: 0 !important;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    .store-card img {
+      width:
+        136px !important; /* 🟢 Taille badges — modifiable */
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .store-status {
+      display: none !important;
+    }
+
+    /* 🟩 =========================================================
+       🟩 CONTACT
+       🟩 Position basse conservée.
+       🟩 ========================================================= */
+
+    .contact-card {
+      max-width: 760px;
+      margin:
+        30px auto 0 !important; /* 🟢 Stores → Contact — modifiable */
+      padding: 0 !important;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      text-align: center;
+    }
+
+    .contact-card h2 {
+      margin:
+        0 0 10px !important;
+    }
+
+    .contact-card a,
+    .contact-card p {
+      font-size: 1rem;
+    }
+
+    /* 🟩 =========================================================
+       🟩 FOOTER
+       🟩 ========================================================= */
+
+    .footer-links,
+    .footer-nav {
+      margin-top:
+        18px !important; /* 🟢 Contact → liens — modifiable */
+    }
+
+    .footer-links a,
+    .footer-nav a {
+      margin:
+        0 8px;
+    }
+
+    .copyright,
+    .site-footer,
+    footer {
+      margin-top:
+        14px !important; /* 🟢 Espacement final — modifiable */
+    }
+
+    /* 🟩 =========================================================
+       🟩 RESPONSIVE
+       🟩 ========================================================= */
+
+    @media (max-width: 1180px) {
+      .promo-ribbon {
+        top:
+          -170px; /* 🟢 Position tablette — modifiable */
+        font-size:
+          1.08rem; /* 🟢 Taille tablette — modifiable */
+      }
+
+      .promo-ribbon-left {
+        left:
+          20px; /* 🟢 Position tablette — modifiable */
+      }
+
+      .promo-ribbon-right {
+        right:
+          20px; /* 🟢 Position tablette — modifiable */
+      }
+
+      .status-lead {
+        white-space: normal;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .logo {
+        width:
+          min(180px, 54vw) !important; /* 🟢 Logo mobile — modifiable */
+      }
+
+      .promo-ribbon {
+        top:
+          -76px; /* 🟢 Position mobile — modifiable */
+        font-size:
+          0.86rem; /* 🟢 Taille mobile — modifiable */
+      }
+
+      .promo-ribbon-left {
+        left: 8px;
+        transform: rotate(-8deg);
+      }
+
+      .promo-ribbon-right {
+        right: 8px;
+        transform: rotate(8deg);
+      }
+
+      .status-card h2 {
+        font-size:
+          clamp(1.55rem, 6vw, 1.95rem);
+      }
+
+      .status-card p,
+      .status-lead,
+      .status-accent,
+      .status-free,
+      .status-highlight,
+      .release {
+        font-size:
+          0.98rem !important;
+        line-height: 1.55;
+      }
+
+      .main-action {
+        margin-top:
+          22px !important; /* 🟢 Espacement mobile — modifiable */
+      }
+
+      .stores-section {
+        margin-top:
+          22px !important; /* 🟢 Même espacement mobile — modifiable */
+      }
+    }
+
+    /* 🟩 LANDING OVERRIDES SEPTEMBRE 2026 — FIN */
+
+  
+
+
+
+
+
+
+
+
+    /* 🟩 OMBRES RUBANS CONSOLIDÉES — DÉBUT */
+
+    /* 🟩 Base visuelle des deux accroches */
+    .promo-ribbon {
+      z-index: 3 !important;
+      filter: none !important;
+      text-shadow: none !important;
+      white-space: normal !important;
+
+      /* 🟢 Taille actuelle conservée : aucun déplacement du texte */
+      font-size:
+        1.88rem !important;
+
+      line-height:
+        1.06 !important;
+
+      letter-spacing:
+        0.02em !important;
+
+      text-transform: none !important;
+    }
+
+    /* 🟩 Aucun ancien pseudo-élément d'ombre */
+    .promo-ribbon::before,
+    .promo-ribbon::after,
+    .promo-ribbon-left::before,
+    .promo-ribbon-left::after,
+    .promo-ribbon-right::before,
+    .promo-ribbon-right::after {
+      content: none !important;
+      display: none !important;
+    }
+
+    /* 🟩 Chaque ligne reste indépendante */
+    .promo-ribbon .ribbon-line {
+      display: block !important;
+      position: relative !important;
+      filter: none !important;
+      text-shadow: none !important;
+    }
+
+    /* 🟢 Espacement actuel conservé */
+    .promo-ribbon .ribbon-line + .ribbon-line {
+      margin-top:
+        0.40em !important;
+    }
+
+    /* 🟢 Décalage actuel conservé */
+    .promo-ribbon .ribbon-line-shift {
+      margin-left:
+        0.78em !important;
+    }
+
+    /* 🟩 1ère : exposant actuel conservé */
+    .promo-ribbon .sup-ere {
+      position: relative !important;
+      top:
+        -0.42em !important;
+      font-size:
+        0.48em !important;
+      line-height: 1 !important;
+    }
+
+    /* 🟩 Tricolore PMR / FRANCE */
+    .promo-ribbon .tri-blue {
+      color:
+        #1d58b7 !important;
+    }
+
+    .promo-ribbon .tri-white {
+      color:
+        #ffffff !important;
+
+      -webkit-text-stroke:
+        1.1px var(--accent) !important;
+
+      paint-order:
+        stroke fill;
+    }
+
+    .promo-ribbon .tri-red {
+      color:
+        #d63a33 !important;
+    }
+
+    /* 🟩 =======================================================
+       🟩 OMBRE GAUCHE
+       🟩 Bas + droite, placement rétabli
+       🟩 ======================================================= */
+
+    .promo-ribbon-left .ribbon-line {
+      text-shadow:
+        22px 18px 4px rgba(13, 79, 139, 0.10) !important;
+    }
+
+    /* 🟢 Les lettres colorées héritent EXACTEMENT de la même ombre */
+    .promo-ribbon-left .ribbon-line * {
+      text-shadow:
+        inherit !important;
+    }
+
+    /* 🟩 =======================================================
+       🟩 OMBRE DROITE
+       🟩 Bas + gauche, placement rétabli
+       🟩 ======================================================= */
+
+    .promo-ribbon-right .ribbon-line {
+      text-shadow:
+        -22px 18px 4px rgba(13, 79, 139, 0.10) !important;
+    }
+
+    /* 🟢 PMR / FRANCE compris */
+    .promo-ribbon-right .ribbon-line * {
+      text-shadow:
+        inherit !important;
+    }
+
+    /* 🟩 Responsive seulement */
+    @media (max-width: 980px) {
+      .promo-ribbon {
+        font-size:
+          1.22rem !important;
+      }
+
+      .promo-ribbon .ribbon-line + .ribbon-line {
+        margin-top:
+          0.30em !important;
+      }
+
+      .promo-ribbon .ribbon-line-shift {
+        margin-left:
+          0.56em !important;
+      }
+
+      .promo-ribbon-left .ribbon-line {
+        text-shadow:
+          14px 12px 3px rgba(13, 79, 139, 0.09) !important;
+      }
+
+      .promo-ribbon-right .ribbon-line {
+        text-shadow:
+          -14px 12px 3px rgba(13, 79, 139, 0.09) !important;
+      }
+    }
+
+    /* 🟩 OMBRES RUBANS CONSOLIDÉES — FIN */
+
+
+</style>
 </head>
 
 <body>
@@ -367,9 +964,8 @@
 
       <h1>Accessibilité Pêche</h1>
 
-      <p class="subtitle">
-        Une application pensée pour faciliter l’accès aux lieux de pêche
-        et aux services adaptés aux personnes à mobilité réduite.
+      <p class="subtitle subtitle-single-line">
+        Une application pensée pour faciliter l’accès aux lieux de pêche et aux services adaptés aux personnes à mobilité réduite.
       </p>
     </section>
 
@@ -377,26 +973,43 @@
          🟩 ÉTAT DE DÉVELOPPEMENT
          🟩 ======================================================= -->
     <section class="status-card">
-      <div class="status-badge">
-        Application en cours de développement
+
+      <div class="promo-ribbon promo-ribbon-left" data-shadow="1ère APPLI&#10;PÊCHE PMR">
+        <span class="ribbon-line">
+          1<span class="sup-ere">ère</span> APPLI
+        </span>
+        <span class="ribbon-line ribbon-line-shift">
+          PÊCHE <span class="tri-blue">P</span><span class="tri-white">M</span><span class="tri-red">R</span>
+        </span>
       </div>
 
-      <h2>Le projet avance</h2>
+      <div class="promo-ribbon promo-ribbon-right" data-shadow="UNIQUE&#10;EN FRANCE">
+        <span class="ribbon-line">
+          UNIQUE
+        </span>
+        <span class="ribbon-line ribbon-line-shift">
+          EN <span class="tri-blue">FR</span><span class="tri-white">AN</span><span class="tri-red">CE</span>
+        </span>
+      </div>
 
-      <p>
-        Accessibilité Pêche a pour objectif de regrouper des informations
-        utiles sur les lieux de pêche accessibles et les services situés
-        à proximité.
+      <h2>Donnez de la visibilité à votre hébergement PMR</h2>
+
+      <p class="status-lead">
+        Valorisez votre hébergement accessible auprès d’un public concerné par la pêche et l’accessibilité.
       </p>
 
-      <p>
-        Les hébergeurs peuvent également proposer un établissement
-        accessible PMR afin qu’il soit vérifié avant publication.
+      <p class="status-accent">
+        Référencement gratuit
+      </p>
+
+      <p class="status-highlight">
+        Soyez parmi les premiers établissements référencés.
       </p>
 
       <p class="release">
-        Bientôt disponible au printemps 2027.
+        Lancement prévu au printemps 2027.
       </p>
+
     </section>
 
     <!-- 🟩 =======================================================
@@ -407,7 +1020,7 @@
         class="primary-button"
         href="formulaire-pmr.html"
       >
-        Proposer un hébergement accessible PMR
+        Référencer mon hébergement PMR
       </a>
     </div>
 
@@ -421,29 +1034,21 @@
       <div class="stores-grid">
 
         <article class="store-card">
-          <!-- 🟢 Taille du badge modifiable -->
+          <!-- 🟢 Taille du badge App Store — modifiable -->
           <img
             src="assets/images/app-store-badge-fr.svg"
             alt="Bientôt disponible sur l’App Store"
             style="width: 220px; max-width: 100%; height: auto;"
           >
-
-          <p class="store-status">
-            Bientôt disponible au printemps 2027.
-          </p>
         </article>
 
         <article class="store-card">
-          <!-- 🟢 Taille du badge modifiable -->
+          <!-- 🟢 Taille du badge Google Play — modifiable -->
           <img
             src="assets/images/google-play-badge-fr.png"
             alt="Bientôt disponible sur Google Play"
             style="width: 220px; max-width: 100%; height: auto;"
           >
-
-          <p class="store-status">
-            Bientôt disponible au printemps 2027.
-          </p>
         </article>
 
       </div>
