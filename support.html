@@ -1,14 +1,255 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Support et contact de l’application Accessibilité Pêche."
+  >
+
   <title>Support — Accessibilité Pêche</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    /* 🟩 =========================================================
+       🟩 THÈME ACCESSIBILITÉ PÊCHE
+       🟩 ========================================================= */
+
+    :root {
+      --primary: #0d4f8b; /* 🟢 Bleu principal — modifiable */
+      --primary-dark: #08365f; /* 🟢 Bleu foncé — modifiable */
+      --background: #f5f9fc; /* 🟢 Fond — modifiable */
+      --surface: #ffffff;
+      --text: #17324d;
+      --muted: #5f7080;
+      --border: #dbe7f0;
+      --shadow: 0 12px 30px rgba(13, 79, 139, 0.12);
+      --radius: 18px; /* 🟢 Arrondi — modifiable */
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        linear-gradient(
+          180deg,
+          #eef7fd 0%,
+          var(--background) 45%,
+          #ffffff 100%
+        );
+    }
+
+    .page {
+      width: min(900px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 24px 0; /* 🟢 Espacement — modifiable */
+    }
+
+    /* 🟩 En-tête commun */
+    .hero {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .logo {
+      display: block;
+      width: min(125px, 42vw); /* 🟢 Taille logo — modifiable */
+      height: auto;
+      margin: 0 auto 6px;
+    }
+
+    .brand {
+      margin: 0;
+      color: var(--primary);
+      font-size:
+        clamp(1.8rem, 4vw, 2.7rem); /* 🟢 Taille — modifiable */
+    }
+
+    .page-title {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size:
+        clamp(1rem, 2vw, 1.15rem);
+      font-weight: 600;
+    }
+
+    /* 🟩 Carte principale */
+    .content-card {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 28px; /* 🟢 Padding — modifiable */
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .content-card h2 {
+      margin: 0 0 12px;
+      color: var(--primary-dark);
+      font-size: 1.55rem;
+    }
+
+    .content-card p {
+      margin: 9px auto;
+      max-width: 620px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    /* 🟩 Adresse de contact */
+    .email-card {
+      display: inline-block;
+      margin: 12px 0;
+      padding: 12px 18px; /* 🟢 Taille — modifiable */
+      border-radius: 999px;
+      background: rgba(13, 79, 139, 0.07);
+      color: var(--primary);
+      font-weight: 800;
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+
+    .email-card:hover {
+      text-decoration: underline;
+    }
+
+    /* 🟩 Bouton retour */
+    .actions {
+      margin-top: 22px;
+    }
+
+    .primary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 22px;
+      border-radius: 13px;
+      background: var(--primary);
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow:
+        0 8px 22px rgba(13, 79, 139, 0.22);
+    }
+
+    .primary-button:hover {
+      transform: translateY(-1px);
+    }
+
+    footer {
+      padding: 18px 8px 4px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin-bottom: 9px;
+    }
+
+    .footer-links a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 700px) {
+      .page {
+        padding-top: 16px;
+      }
+
+      .content-card {
+        padding: 22px 16px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Support — Accessibilité Pêche</h1>
-  <p>Pour toute question concernant l’application <strong>Accessibilité Pêche</strong>, vous pouvez nous contacter à l’adresse suivante :</p>
-  <p><strong>contact@accessibilite-peche.fr</strong></p>
-  <p>Nous vous répondrons dès que possible.</p>
+  <main class="page">
+
+    <!-- 🟩 Identité Accessibilité Pêche -->
+    <header class="hero">
+      <a href="index.html" aria-label="Retour à l’accueil">
+        <img
+          class="logo"
+          src="assets/images/logo_bleu_appli_1.png"
+          alt="Logo Accessibilité Pêche"
+        >
+      </a>
+
+      <h1 class="brand">Accessibilité Pêche</h1>
+
+      <p class="page-title">
+        Support
+      </p>
+    </header>
+
+    <!-- 🟩 Contenu Support -->
+    <section class="content-card">
+      <h2>Comment pouvons-nous vous aider ?</h2>
+
+      <p>
+        Pour toute question concernant l’application
+        <strong>Accessibilité Pêche</strong>, vous pouvez nous contacter
+        à l’adresse suivante :
+      </p>
+
+      <a
+        class="email-card"
+        href="mailto:contact@accessibilite-peche.fr"
+      >
+        contact@accessibilite-peche.fr
+      </a>
+
+      <p>
+        Nous vous répondrons dès que possible.
+      </p>
+
+      <div class="actions">
+        <a
+          class="primary-button"
+          href="index.html"
+        >
+          Retour à l’accueil
+        </a>
+      </div>
+    </section>
+
+    <!-- 🟩 Pied de page -->
+    <footer>
+      <nav
+        class="footer-links"
+        aria-label="Liens utiles"
+      >
+        <a href="index.html">Accueil</a>
+        <a href="confidentialite.html">Confidentialité</a>
+      </nav>
+
+      <div>© 2026 Accessibilité Pêche</div>
+    </footer>
+
+  </main>
 </body>
 </html>

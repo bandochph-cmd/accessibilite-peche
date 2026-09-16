@@ -1,128 +1,379 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <meta
+    name="description"
+    content="Politique de confidentialité de l’application Accessibilité Pêche."
+  >
+
   <title>Politique de confidentialité — Accessibilité Pêche</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    /* 🟩 =========================================================
+       🟩 THÈME ACCESSIBILITÉ PÊCHE
+       🟩 ========================================================= */
+
+    :root {
+      --primary: #0d4f8b; /* 🟢 Bleu principal — modifiable */
+      --primary-dark: #08365f;
+      --background: #f5f9fc;
+      --surface: #ffffff;
+      --text: #17324d;
+      --muted: #5f7080;
+      --border: #dbe7f0;
+      --shadow: 0 12px 30px rgba(13, 79, 139, 0.10);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        linear-gradient(
+          180deg,
+          #eef7fd 0%,
+          var(--background) 30%,
+          #ffffff 100%
+        );
+    }
+
+    .page {
+      width: min(1000px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 22px 0 26px;
+    }
+
+    /* 🟩 En-tête */
+    .hero {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .logo {
+      display: block;
+      width: min(115px, 40vw); /* 🟢 Taille — modifiable */
+      height: auto;
+      margin: 0 auto 5px;
+    }
+
+    .brand {
+      margin: 0;
+      color: var(--primary);
+      font-size:
+        clamp(1.75rem, 4vw, 2.55rem);
+    }
+
+    .page-title {
+      margin: 7px 0 0;
+      color: var(--muted);
+      font-size:
+        clamp(1rem, 2vw, 1.15rem);
+      font-weight: 600;
+    }
+
+    /* 🟩 Carte juridique */
+    .content-card {
+      padding: 30px 36px; /* 🟢 Padding — modifiable */
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .content-card > p:first-of-type {
+      margin-top: 0;
+    }
+
+    .content-card h2 {
+      margin:
+        26px 0 8px;
+      color: var(--primary-dark);
+      font-size:
+        1.25rem; /* 🟢 Taille — modifiable */
+    }
+
+    .content-card p,
+    .content-card li {
+      color: var(--muted);
+      line-height: 1.62;
+    }
+
+    .content-card p {
+      margin:
+        8px 0;
+    }
+
+    .content-card ul {
+      margin:
+        10px 0 14px;
+      padding-left:
+        24px; /* 🟢 Indentation — modifiable */
+    }
+
+    /* 🟩 Contact juridique */
+    .privacy-email {
+      display: inline-block;
+      margin:
+        6px 0 4px;
+      padding:
+        9px 14px;
+      border-radius: 999px;
+      background: rgba(13, 79, 139, 0.07);
+      color: var(--primary);
+      font-weight: 800;
+      text-decoration: none;
+      overflow-wrap: anywhere;
+    }
+
+    .privacy-email:hover {
+      text-decoration: underline;
+    }
+
+    /* 🟩 Navigation */
+    .actions {
+      margin-top: 28px;
+      text-align: center;
+    }
+
+    .primary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 22px;
+      border-radius: 13px;
+      background: var(--primary);
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 700;
+      box-shadow:
+        0 8px 22px rgba(13, 79, 139, 0.22);
+    }
+
+    footer {
+      padding:
+        18px 8px 4px;
+      text-align: center;
+      color: var(--muted);
+      font-size:
+        0.86rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap:
+        10px 18px;
+      margin-bottom: 9px;
+    }
+
+    .footer-links a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    @media (max-width: 700px) {
+      .page {
+        padding-top: 14px;
+      }
+
+      .content-card {
+        padding:
+          23px 17px;
+      }
+
+      .content-card h2 {
+        margin-top:
+          22px;
+      }
+    }
+  </style>
 </head>
 
 <body>
-  <h1>Politique de confidentialité — Accessibilité Pêche</h1>
+  <main class="page">
 
-  <p>
-    La présente politique de confidentialité explique comment l’application
-    <strong>Accessibilité Pêche</strong>, également appelée <strong>Access Pêche</strong>,
-    peut utiliser certaines données nécessaires à son fonctionnement.
-  </p>
+    <!-- 🟩 Identité Accessibilité Pêche -->
+    <header class="hero">
+      <a href="index.html" aria-label="Retour à l’accueil">
+        <img
+          class="logo"
+          src="assets/images/logo_bleu_appli_1.png"
+          alt="Logo Accessibilité Pêche"
+        >
+      </a>
 
-  <h2>Données utilisées par l’application</h2>
+      <h1 class="brand">Accessibilité Pêche</h1>
 
-  <p>
-    L’application peut utiliser certaines données afin de fournir ses fonctionnalités,
-    notamment :
-  </p>
+      <p class="page-title">
+        Politique de confidentialité
+      </p>
+    </header>
 
-  <ul>
-    <li>les informations de compte utilisateur, comme l’adresse e-mail utilisée pour la création et la connexion au compte ;</li>
-    <li>la géolocalisation, uniquement si vous l’autorisez ;</li>
-    <li>les photos ou images que vous choisissez d’ajouter dans l’application ;</li>
-    <li>les contenus que vous envoyez volontairement, comme les avis, signalements, favoris ou informations liées à des spots ;</li>
-    <li>des données techniques nécessaires au bon fonctionnement du service.</li>
-  </ul>
+    <!-- 🟩 Contenu juridique existant conservé -->
+    <article class="content-card">
 
-  <h2>Utilisation de la caméra et des photos</h2>
+      <p>
+        La présente politique de confidentialité explique comment l’application
+        <strong>Accessibilité Pêche</strong>, également appelée <strong>Access Pêche</strong>,
+        peut utiliser certaines données nécessaires à son fonctionnement.
+      </p>
 
-  <p>
-    L’application peut demander l’accès à la caméra afin de permettre à l’utilisateur
-    de prendre ou d’ajouter une photo liée à un spot de pêche, un avis, un signalement
-    ou un autre contenu qu’il choisit d’envoyer.
-  </p>
+      <h2>Données utilisées par l’application</h2>
 
-  <p>
-    Les photos sont utilisées uniquement pour les fonctionnalités de l’application.
-    Elles ne sont pas revendues à des tiers et ne sont pas utilisées à des fins
-    publicitaires.
-  </p>
+      <p>
+        L’application peut utiliser certaines données afin de fournir ses fonctionnalités,
+        notamment :
+      </p>
 
-  <h2>Utilisation de la géolocalisation</h2>
+      <ul>
+        <li>les informations de compte utilisateur, comme l’adresse e-mail utilisée pour la création et la connexion au compte ;</li>
+        <li>la géolocalisation, uniquement si vous l’autorisez ;</li>
+        <li>les photos ou images que vous choisissez d’ajouter dans l’application ;</li>
+        <li>les contenus que vous envoyez volontairement, comme les avis, signalements, favoris ou informations liées à des spots ;</li>
+        <li>des données techniques nécessaires au bon fonctionnement du service.</li>
+      </ul>
 
-  <p>
-    La géolocalisation peut être utilisée pour afficher des spots de pêche accessibles,
-    améliorer l’utilisation de la carte, faciliter la recherche de lieux proches
-    et proposer des informations utiles autour de l’utilisateur.
-  </p>
+      <h2>Utilisation de la caméra et des photos</h2>
 
-  <p>
-    La géolocalisation est utilisée uniquement si l’utilisateur donne son autorisation
-    via les réglages de son appareil.
-  </p>
+      <p>
+        L’application peut demander l’accès à la caméra afin de permettre à l’utilisateur
+        de prendre ou d’ajouter une photo liée à un spot de pêche, un avis, un signalement
+        ou un autre contenu qu’il choisit d’envoyer.
+      </p>
 
-  <h2>Compte utilisateur et authentification</h2>
+      <p>
+        Les photos sont utilisées uniquement pour les fonctionnalités de l’application.
+        Elles ne sont pas revendues à des tiers et ne sont pas utilisées à des fins
+        publicitaires.
+      </p>
 
-  <p>
-    L’application peut utiliser une adresse e-mail et des informations de compte
-    afin de permettre la création d’un compte, la connexion, la gestion du profil
-    et l’accès aux fonctionnalités associées.
-  </p>
+      <h2>Utilisation de la géolocalisation</h2>
 
-  <h2>Stockage et services techniques</h2>
+      <p>
+        La géolocalisation peut être utilisée pour afficher des spots de pêche accessibles,
+        améliorer l’utilisation de la carte, faciliter la recherche de lieux proches
+        et proposer des informations utiles autour de l’utilisateur.
+      </p>
 
-  <p>
-    L’application peut utiliser des services techniques comme Supabase pour gérer
-    l’authentification, la base de données, le stockage de certains contenus et le
-    bon fonctionnement de l’application.
-  </p>
+      <p>
+        La géolocalisation est utilisée uniquement si l’utilisateur donne son autorisation
+        via les réglages de son appareil.
+      </p>
 
-  <p>
-    Les données sont utilisées uniquement pour fournir les fonctionnalités de
-    l’application, améliorer l’expérience utilisateur et permettre l’accès aux
-    services associés.
-  </p>
+      <h2>Compte utilisateur et authentification</h2>
 
-  <h2>Partage des données</h2>
+      <p>
+        L’application peut utiliser une adresse e-mail et des informations de compte
+        afin de permettre la création d’un compte, la connexion, la gestion du profil
+        et l’accès aux fonctionnalités associées.
+      </p>
 
-  <p>
-    Les données ne sont pas revendues à des tiers.
-  </p>
+      <h2>Stockage et services techniques</h2>
 
-  <p>
-    Certaines données peuvent être traitées par les services techniques nécessaires
-    au fonctionnement de l’application, uniquement dans le cadre des fonctionnalités
-    prévues.
-  </p>
+      <p>
+        L’application peut utiliser des services techniques comme Supabase pour gérer
+        l’authentification, la base de données, le stockage de certains contenus et le
+        bon fonctionnement de l’application.
+      </p>
 
-  <h2>Droits de l’utilisateur</h2>
+      <p>
+        Les données sont utilisées uniquement pour fournir les fonctionnalités de
+        l’application, améliorer l’expérience utilisateur et permettre l’accès aux
+        services associés.
+      </p>
 
-  <p>
-    Vous pouvez demander l’accès, la rectification ou la suppression de vos données
-    personnelles en contactant le développeur à l’adresse indiquée ci-dessous.
-  </p>
+      <h2>Partage des données</h2>
 
-  <p>
-    Si une fonctionnalité de suppression de compte est disponible dans l’application,
-    vous pouvez également l’utiliser directement depuis votre compte.
-  </p>
+      <p>
+        Les données ne sont pas revendues à des tiers.
+      </p>
 
-  <h2>Contact</h2>
+      <p>
+        Certaines données peuvent être traitées par les services techniques nécessaires
+        au fonctionnement de l’application, uniquement dans le cadre des fonctionnalités
+        prévues.
+      </p>
 
-  <p>
-    Pour toute question relative à la confidentialité ou à vos données, vous pouvez
-    nous contacter à l’adresse suivante :
-  </p>
+      <h2>Droits de l’utilisateur</h2>
 
-  <p>
-    <strong>contact@accessibilite-peche.fr</strong>
-  </p>
+      <p>
+        Vous pouvez demander l’accès, la rectification ou la suppression de vos données
+        personnelles en contactant le développeur à l’adresse indiquée ci-dessous.
+      </p>
 
-  <h2>Mise à jour</h2>
+      <p>
+        Si une fonctionnalité de suppression de compte est disponible dans l’application,
+        vous pouvez également l’utiliser directement depuis votre compte.
+      </p>
 
-  <p>
-    Cette politique de confidentialité peut être mise à jour afin de refléter les
-    évolutions de l’application ou des obligations légales.
-  </p>
+      <h2>Contact</h2>
 
-  <p>
-    Dernière mise à jour : 18/06/2026
-  </p>
+      <p>
+        Pour toute question relative à la confidentialité ou à vos données, vous pouvez
+        nous contacter à l’adresse suivante :
+      </p>
+
+      <a
+        class="privacy-email"
+        href="mailto:contact@accessibilite-peche.fr"
+      >
+        contact@accessibilite-peche.fr
+      </a>
+
+      <h2>Mise à jour</h2>
+
+      <p>
+        Cette politique de confidentialité peut être mise à jour afin de refléter les
+        évolutions de l’application ou des obligations légales.
+      </p>
+
+      <p>
+        Dernière mise à jour : 18/06/2026
+      </p>
+
+      <div class="actions">
+        <a
+          class="primary-button"
+          href="index.html"
+        >
+          Retour à l’accueil
+        </a>
+      </div>
+
+    </article>
+
+    <!-- 🟩 Pied de page -->
+    <footer>
+      <nav
+        class="footer-links"
+        aria-label="Liens utiles"
+      >
+        <a href="index.html">Accueil</a>
+        <a href="support.html">Support</a>
+      </nav>
+
+      <div>© 2026 Accessibilité Pêche</div>
+    </footer>
+
+  </main>
 </body>
 </html>
