@@ -108,6 +108,21 @@
       color: var(--muted);
     }
 
+    /* 🟩 Nouvelle phrase de légitimité du projet */
+    .subtitle-pmr {
+      margin:
+        4px auto 0; /* 🟢 Espacement vertical très compact — modifiable */
+      max-width: 760px;
+      font-size:
+        clamp(0.95rem, 1.7vw, 1.05rem); /* 🟢 Taille — modifiable */
+      line-height:
+        1.2; /* 🟢 Interligne compact — modifiable */
+      font-weight:
+        600; /* 🟢 Mise en valeur légère — modifiable */
+      color:
+        var(--primary-dark); /* 🟢 Couleur — modifiable */
+    }
+
     /* 🟩 =========================================================
        🟩 ÉTAT DU PROJET
        🟩 ========================================================= */
@@ -301,7 +316,7 @@
     .store-card {
       min-height: auto;
       padding:
-        2px 18px; /* 🟢 Espacement autour du badge — modifiable */
+        0 18px; /* 🟢 Espacement vertical réduit — modifiable */
       background: transparent;
       border: 0;
       border-radius: 0;
@@ -331,9 +346,9 @@
     .contact-card {
       max-width: 760px;
       margin:
-        0 auto 10px; /* 🟢 Marge basse réduite — modifiable */
+        0 auto 0; /* 🟢 Marge basse fortement réduite — modifiable */
       padding:
-        10px 18px; /* 🟢 Padding réduit — modifiable */
+        4px 18px 2px; /* 🟢 Padding vertical compact — modifiable */
       background:
         rgba(13, 79, 139, 0.07); /* 🟢 Fond — modifiable */
       border:
@@ -344,7 +359,7 @@
 
     .contact-card h2 {
       margin:
-        0 0 10px;
+        0 0 4px; /* 🟢 Espace Contact → e-mail réduit — modifiable */
       color: var(--primary-dark);
     }
 
@@ -365,7 +380,7 @@
 
     footer {
       padding:
-        8px 12px 4px; /* 🟢 Padding réduit — modifiable */
+        2px 12px 4px; /* 🟢 Espace au-dessus du footer réduit — modifiable */
       text-align: center;
       color: var(--muted);
       font-size:
@@ -378,7 +393,7 @@
       flex-wrap: wrap;
       gap:
         12px 20px; /* 🟢 Espacement — modifiable */
-      margin-bottom: 14px;
+      margin-bottom: 8px; /* 🟢 Espace liens → copyright réduit — modifiable */
     }
 
     .footer-links a {
@@ -966,6 +981,10 @@
 
       <p class="subtitle subtitle-single-line">
         Une application pensée pour faciliter l’accès aux lieux de pêche et aux services adaptés aux personnes à mobilité réduite.
+      </p>
+
+      <p class="subtitle-pmr">
+        Enfin une application créée pour &amp; par une personne à mobilité réduite.
       </p>
     </section>
 
