@@ -507,10 +507,12 @@
               placeholder="Ex : 42.566800"
             />
             <div class="hint">
-              🟢 Pour trouver vos coordonnées : ouvrez votre établissement dans Google Maps,
-              faites un clic droit sur son emplacement puis cliquez sur les coordonnées affichées
-              pour les copier. Le premier nombre correspond à la latitude.
-              Exemple : 42.566800, 8.757200 → latitude = 42.566800.
+              <strong>
+                Important : après avoir copié les coordonnées depuis Google Maps,
+                collez-les d’abord dans une note pour séparer les deux valeurs.
+              </strong>
+              Le 1er nombre correspond à la latitude.
+              Exemple : 43.623405, 3.913315 → latitude = 43.623405.
             </div>
           </div>
 
@@ -527,8 +529,11 @@
               placeholder="Ex : 8.757200"
             />
             <div class="hint">
-              🟢 La longitude correspond au deuxième nombre des coordonnées copiées depuis Google Maps.
-              Exemple : 42.566800, 8.757200 → longitude = 8.757200.
+              <strong>
+                Le 2e nombre correspond à la longitude.
+              </strong>
+              Recopiez-le ensuite séparément depuis votre note.
+              Exemple : 43.623405, 3.913315 → longitude = 3.913315.
             </div>
           </div>
 
@@ -584,7 +589,7 @@
 
         <div class="actions">
           <button id="submitButton" type="submit">Envoyer la demande</button>
-          <span class="hint">La demande sera vérifiée avant publication.</span>
+          <span class="hint">Après envoi, la demande sera contrôlée avant publication.</span>
         </div>
 
         <div id="message" class="message" role="status" aria-live="polite"></div>
@@ -667,6 +672,21 @@
       event.preventDefault();
       clearMessage();
 
+      // 🟩 Contrôle HTTPS avant l'envoi
+      // 🟢 Évite une erreur technique si le site commence par http://.
+      const sourceUrlInput = document.getElementById("source_url");
+      const sourceUrl = sourceUrlInput.value.trim();
+
+      if (!sourceUrl.toLowerCase().startsWith("https://")) {
+        setMessage(
+          "error",
+          "Le site web doit commencer par https://. Remplacez http:// par https:// puis réessayez.",
+        );
+
+        sourceUrlInput.focus();
+        return;
+      }
+
       const photo = document.getElementById("photo").files[0];
 
       if (!photo) {
@@ -717,7 +737,7 @@
 
         setMessage(
           "success",
-          "Demande envoyée. Elle sera vérifiée avant publication.",
+          "Votre demande a bien été prise en compte. Elle sera vérifiée avant publication et, si elle est conforme, pourra être visible dans l’application sous 24 heures.",
         );
 
         form.reset();
