@@ -600,11 +600,6 @@
         id="baitShopForm"
         class="bait-hidden"
       >
-        <div class="loaded-intro">
-          Merci de vérifier les informations de votre établissement
-          et de compléter ou corriger les éléments nécessaires.
-        </div>
-
         <div class="grid">
 
           <div class="form-section-title">
@@ -822,8 +817,8 @@
             </div>
 
             <div class="hint">
-              Si vous répondez Oui aux appâts vivants,
-              la vente d’appâts doit également être indiquée Oui.
+              Si votre établissement ne vend pas d’appâts,
+              cette réponse est automatiquement réglée sur Non.
             </div>
           </div>
 
@@ -1193,6 +1188,68 @@
       }
     }
 
+    // 🟩============================================================
+    // 🟩 SYNCHRONISATION APPÂTS / APPÂTS VIVANTS
+    // 🟢 Si le magasin ne vend pas d'appâts :
+    // 🟢 - Appâts vivants passe automatiquement à Non ;
+    // 🟢 - le choix est désactivé tant que Appâts reste sur Non.
+    // 🟩============================================================
+    function syncLiveBaitAvailability(
+      clearLiveChoiceWhenEnabled = false,
+    ) {
+      const selectedBait =
+        document.querySelector(
+          'input[name="bait_confirmed"]:checked',
+        );
+
+      const liveBaitRadios =
+        document.querySelectorAll(
+          'input[name="sells_live_bait"]',
+        );
+
+      const baitIsNo =
+        selectedBait?.value === "false";
+
+      for (
+        const radio
+        of liveBaitRadios
+      ) {
+        if (baitIsNo) {
+          radio.checked =
+            radio.value === "false";
+        } else if (clearLiveChoiceWhenEnabled) {
+          // 🟢 Retour de Non vers Oui :
+          // 🟢 on redemande explicitement l'information.
+          radio.checked =
+            false;
+        }
+
+        radio.disabled =
+          baitIsNo;
+
+        // 🟢 Quand Appâts = Oui, une réponse explicite reste requise.
+        radio.required =
+          !baitIsNo;
+      }
+    }
+
+    // 🟢 Réagit immédiatement au choix Oui / Non sur la vente d'appâts.
+    for (
+      const radio
+      of document.querySelectorAll(
+        'input[name="bait_confirmed"]',
+      )
+    ) {
+      radio.addEventListener(
+        "change",
+        () => {
+          syncLiveBaitAvailability(
+            true,
+          );
+        },
+      );
+    }
+
     function configurePhotoState(
       establishment,
     ) {
@@ -1253,6 +1310,9 @@
         false;
 
       form.reset();
+
+      // 🟢 Réinitialise aussi l'état actif/désactivé des appâts vivants.
+      syncLiveBaitAvailability();
 
       form
         .classList
@@ -1446,6 +1506,9 @@
           establishment.sells_live_bait,
         );
 
+        // 🟢 Applique la cohérence visuelle après le préremplissage.
+        syncLiveBaitAvailability();
+
         setPmrStatus(
           establishment.pmr_status ||
           "to_verify",
@@ -1625,18 +1688,9 @@
           return;
         }
 
-        if (
-          selectedLiveBait.value === "true" &&
-          selectedBait.value !== "true"
-        ) {
-          setMessage(
-            message,
-            "error",
-            "La vente d’appâts vivants implique de répondre Oui à la vente d’appâts.",
-          );
-
-          return;
-        }
+        // 🟢 La cohérence Appâts / Appâts vivants est désormais
+        // 🟢 gérée dès la sélection dans l'interface.
+        // 🟢 Le backend conserve son garde-fou de sécurité.
 
         const selectedPmr =
           document.querySelector(
