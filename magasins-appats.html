@@ -963,7 +963,169 @@
     /* 🟩 OMBRES RUBANS CONSOLIDÉES — FIN */
 
 
-</style>
+
+    /* 🟩 =========================================================
+       🟩 ZZZ_MOBILE_QR_HEADER_2026_10_13
+       🟩 Présentation mobile QR Code uniquement
+       🟩 ========================================================= */
+
+    /* 🟢 Invisibles sur tablette large et ordinateur. */
+    .mobile-qr-promo,
+    .mobile-free-badge {
+      display: none;
+    }
+
+    @media (max-width: 820px) {
+
+      /* 🟩 Le hero devient le repère des accroches sur mobile uniquement. */
+      .hero {
+        position: relative;
+      }
+
+      /* 🟢 Logo mobile conservé exactement à sa taille actuelle — modifiable */
+      .hero .logo {
+        width:
+          min(142px, 43vw) !important;
+        margin-bottom:
+          0 !important;
+      }
+
+      /* 🟩 Les deux accroches deviennent un vrai bloc mobile.
+         🟢 Plus de position absolute : aucun chevauchement du texte. */
+      .mobile-qr-promo {
+        display: flex;
+        position: absolute;
+
+        /* 🟢 Position verticale des deux accroches — modifiable
+           Plus petit = encore plus haut. */
+        top:
+          30px; /* 🟢 Position mobile remontée — modifiable */
+
+        left: 0;
+        right: 0;
+        z-index: 4;
+
+        width: 100%;
+        max-width:
+          350px; /* 🟢 Largeur maximale — modifiable */
+
+        margin:
+          0 auto;
+
+        padding:
+          0 4px; /* 🟢 Marges latérales — modifiable */
+
+        align-items: flex-start;
+        justify-content: space-between;
+
+        gap:
+          12px; /* 🟢 Espace entre gauche et droite — modifiable */
+
+        box-sizing: border-box;
+        pointer-events: none;
+      }
+
+      .mobile-promo {
+        flex: 1 1 0;
+        color: var(--accent);
+        font-size:
+          0.78rem; /* 🟢 Typographie mobile réduite d’un petit cran — modifiable */
+        font-weight: 900;
+        font-style: italic;
+        line-height:
+          1.05; /* 🟢 Interligne — modifiable */
+        letter-spacing:
+          0.015em; /* 🟢 Espacement lettres — modifiable */
+      }
+
+      .mobile-promo-left {
+        text-align: left;
+        transform:
+          rotate(-4deg); /* 🟢 Inclinaison gauche — modifiable */
+      }
+
+      .mobile-promo-right {
+        text-align: right;
+        transform:
+          rotate(4deg); /* 🟢 Inclinaison droite — modifiable */
+      }
+
+      .mobile-promo-line {
+        display: block;
+        white-space: nowrap;
+      }
+
+      .mobile-promo-line + .mobile-promo-line {
+        margin-top:
+          0.15em; /* 🟢 Espace entre les deux lignes — modifiable */
+      }
+
+      /* 🟢 Petit exposant de "1ère". */
+      .mobile-sup-ere {
+        position: relative;
+        top:
+          -0.32em; /* 🟢 Position exposant — modifiable */
+        font-size:
+          0.52em; /* 🟢 Taille exposant — modifiable */
+      }
+
+      /* 🟩 PMR / FRANCE tricolores */
+      .mobile-tri-blue {
+        color: #1d58b7;
+      }
+
+      .mobile-tri-white {
+        color: #ffffff;
+        -webkit-text-stroke:
+          0.8px var(--accent); /* 🟢 Contour blanc — modifiable */
+        paint-order: stroke fill;
+      }
+
+      .mobile-tri-red {
+        color: #d63a33;
+      }
+
+      /* 🟩 100 % GRATUIT :
+         🟢 visible immédiatement sous les accroches. */
+      .mobile-free-badge {
+        display: block;
+        width: fit-content;
+
+        margin:
+          4px auto 8px; /* 🟢 Position verticale — modifiable */
+
+        padding: 0;
+
+        /* 🟢 Plus de tuile : texte orange uniquement. */
+        background: transparent;
+        border: 0;
+        border-radius: 0;
+
+        color:
+          var(--accent);
+
+        font-size:
+          1.05rem; /* 🟢 Taille "100 % GRATUIT" — modifiable */
+
+        font-weight: 900;
+        line-height: 1.1;
+
+        letter-spacing:
+          0.035em; /* 🟢 Espacement lettres — modifiable */
+
+        text-align: center;
+        text-transform: uppercase;
+      }
+
+      /* 🟢 Les rubans desktop historiques restent dans le HTML,
+         mais sont masqués uniquement sur téléphone.
+         Cela évite tout doublon et tout chevauchement. */
+      .status-card > .promo-ribbon {
+        display: none !important;
+      }
+    }
+
+  </style>
 </head>
 
 <body>
@@ -978,6 +1140,33 @@
         src="assets/images/logo_bleu_appli_1.png"
         alt="Logo Accessibilité Pêche"
       >
+
+      <!-- 🟩 ZZZ_MOBILE_QR_HEADER_2026_10_13 -->
+      <!-- 🟢 Accroches dédiées au mobile : le desktop reste inchangé. -->
+      <div class="mobile-qr-promo" aria-hidden="true">
+        <div class="mobile-promo mobile-promo-left">
+          <span class="mobile-promo-line">
+            1<span class="mobile-sup-ere">ère</span> APPLI
+          </span>
+          <span class="mobile-promo-line">
+            PÊCHE
+            <span class="mobile-tri-blue">P</span><span class="mobile-tri-white">M</span><span class="mobile-tri-red">R</span>
+          </span>
+        </div>
+
+        <div class="mobile-promo mobile-promo-right">
+          <span class="mobile-promo-line">
+            UNIQUE
+          </span>
+          <span class="mobile-promo-line">
+            EN
+            <span class="mobile-tri-blue">FR</span><span class="mobile-tri-white">AN</span><span class="mobile-tri-red">CE</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- 🟢 Information essentielle visible immédiatement sur téléphone. -->
+      <p class="mobile-free-badge">100 % GRATUIT</p>
 
       <h1>Accessibilité Pêche</h1>
 
