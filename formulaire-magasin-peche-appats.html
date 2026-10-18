@@ -981,6 +981,7 @@
             <label class="checkbox">
               <input
                 id="gps_confirmed"
+                name="gps_confirmed"
                 type="checkbox"
                 required
               />
@@ -1858,6 +1859,19 @@
           formData.set(
             "sells_live_bait",
             selectedLiveBait.value,
+          );
+
+          // 🟩 Confirmation GPS obligatoire
+          // 🟢 Transmise explicitement au serveur.
+          formData.set(
+            "gps_confirmed",
+            document
+              .getElementById(
+                "gps_confirmed",
+              )
+              .checked
+              ? "true"
+              : "false",
           );
 
           formData.set(
