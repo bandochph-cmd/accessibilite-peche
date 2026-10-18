@@ -519,6 +519,44 @@
       }
     }
 
+
+    /* 🟩 ZZZ_MAGASIN_TITRES_CENTRAGE_20261018
+       🟢 Centrage réel sur la largeur de la fiche.
+       🟢 Aucun décalage artificiel gauche/droite. */
+    .hero-title-line {
+      width: 100%;
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+    }
+
+    .hero-title-line > h1 {
+      width: 100%;
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      box-sizing: border-box;
+      text-align: center;
+      transform: none;
+    }
+
+    @media (min-width: 761px) {
+      .hero-title-line > h1 {
+        /* 🟢 Légère réduction pour rester entièrement
+           🟢 dans l'axe de la fiche blanche. */
+        font-size: clamp(26px, 2.2vw, 34px);
+        white-space: nowrap;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .hero-title-line > h1 {
+        transform: none;
+        white-space: normal;
+      }
+    }
+
   </style>
 </head>
 
