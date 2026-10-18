@@ -570,11 +570,17 @@
 
     .status-card h2 {
       margin:
-        0 0 18px;
+        0 0 6px; /* 🟢 Espace titre → texte réduit au minimum utile */
       color: var(--primary-dark);
       font-size:
-        clamp(1.85rem, 3.2vw, 2.45rem); /* 🟢 Taille — modifiable */
-      line-height: 1.2;
+        clamp(1.55rem, 2.15vw, 2rem); /* 🟢 Taille réduite pour conserver une seule ligne */
+      line-height:
+        1.06; /* 🟢 Interligne resserré */
+      letter-spacing:
+        -0.018em; /* 🟢 Largeur optique légèrement réduite */
+      white-space:
+        nowrap; /* 🟢 Desktop : titre complet sur une seule ligne */
+      text-align: center;
     }
 
     .status-card p {
@@ -780,6 +786,9 @@
       .status-card h2 {
         font-size:
           clamp(1.55rem, 6vw, 1.95rem);
+        white-space:
+          normal; /* 🟢 Mobile : retour à la ligne autorisé si nécessaire */
+        letter-spacing: normal;
       }
 
       .status-card p,
