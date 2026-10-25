@@ -757,6 +757,48 @@
             </div>
           </div>
 
+          <!-- 🟩 ZZZ_HTTPS_DOUBLE_ACTIVITY_20261025 -->
+          <!-- 🟢 Deuxième activité facultative. -->
+          <div class="field full">
+            <label for="zzz_complementary_enabled">
+              Également magasin de pêche et d'appâts
+            </label>
+
+            <label class="pmr-option" for="zzz_complementary_enabled">
+              <input
+                id="zzz_complementary_enabled"
+                name="zzz_complementary_enabled"
+                type="checkbox"
+                role="switch"
+                value="true"
+              />
+              <span>Activer cette deuxième activité</span>
+            </label>
+
+            <div class="hint">
+              Cette déclaration sera vérifiée avant toute
+              publication de la deuxième activité.
+            </div>
+          </div>
+
+          <div
+            class="field full"
+            id="zzz_complementary_comment_wrapper"
+            style="display: none"
+          >
+            <label for="zzz_complementary_comment">
+              Précisions sur cette activité (facultatif)
+            </label>
+
+            <textarea
+              id="zzz_complementary_comment"
+              name="zzz_complementary_comment"
+              maxlength="1500"
+              rows="3"
+              placeholder="Informations complémentaires..."
+            ></textarea>
+          </div>
+
           <div class="form-section-title">
             Accessibilité PMR
           </div>
@@ -1573,6 +1615,20 @@
               form,
             );
 
+          // 🟩 Double activité : transmission explicite.
+          formData.set(
+            "zzz_complementary_enabled",
+            zzzComplementaryToggle.checked ? "true" : "false",
+          );
+
+          formData.set(
+            "zzz_complementary_comment",
+            zzzComplementaryToggle.checked
+              ? zzzComplementaryComment.value.trim()
+              : "",
+          );
+
+
           // 🟢 Le code n'est pas mis dans l'URL.
           formData.set(
             "code",
@@ -1693,6 +1749,39 @@
         }
       },
     );
+
+    // 🟩 ZZZ — Activité complémentaire facultative.
+    // 🟢 Commentaire visible uniquement si ON.
+    const zzzComplementaryToggle =
+      document.getElementById("zzz_complementary_enabled");
+
+    const zzzComplementaryWrapper =
+      document.getElementById("zzz_complementary_comment_wrapper");
+
+    const zzzComplementaryComment =
+      document.getElementById("zzz_complementary_comment");
+
+    function zzzSynchroniserActiviteComplementaire() {
+      const active = zzzComplementaryToggle.checked;
+
+      zzzComplementaryWrapper.style.display =
+        active ? "" : "none";
+
+      if (!active) {
+        zzzComplementaryComment.value = "";
+      }
+    }
+
+    zzzComplementaryToggle.addEventListener(
+      "change",
+      zzzSynchroniserActiviteComplementaire,
+    );
+
+    form.addEventListener("reset", () => {
+      queueMicrotask(zzzSynchroniserActiviteComplementaire);
+    });
+
+    zzzSynchroniserActiviteComplementaire();
   </script>
 </body>
 </html>
