@@ -1012,7 +1012,6 @@
                 id="photo_consent"
                 name="photo_consent"
                 type="checkbox"
-                required
               />
               <span>
                 J’autorise l’utilisation de la photo affichée ou transmise
@@ -1248,11 +1247,13 @@
             "bait-hidden",
           );
 
+        // 🟩 ZZZ_DEPO_PHOTO_OPTIONAL_20261026
+        // 🟢 Aucune photo obligatoire.
         photo.required =
-          true;
+          false;
 
         photoLabel.textContent =
-          "Photo de l’établissement *";
+          "Photo de l’établissement (facultative)";
       }
     }
 
@@ -1635,20 +1636,6 @@
         const selectedPhoto =
           photo.files[0];
 
-        if (
-          !hasExistingPhoto &&
-          !selectedPhoto
-        ) {
-          setMessage(
-            message,
-            "error",
-            "Une photo de votre établissement est nécessaire.",
-          );
-
-          photo.focus();
-          return;
-        }
-
         if (selectedPhoto) {
           if (
             selectedPhoto.size >
@@ -1677,6 +1664,20 @@
 
             return;
           }
+        }
+
+        // 🟢 Autorisation exigée uniquement avec une vraie photo.
+        if (
+          (hasExistingPhoto || selectedPhoto) &&
+          !document.getElementById("photo_consent").checked
+        ) {
+          setMessage(
+            message,
+            "error",
+            "Veuillez autoriser l’utilisation de la photo de votre établissement.",
+          );
+          document.getElementById("photo_consent").focus();
+          return;
         }
 
         submitButton.disabled =
