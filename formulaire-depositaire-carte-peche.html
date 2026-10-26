@@ -740,6 +740,52 @@
             </div>
           </div>
 
+
+          <!-- 🟩 ZZZ_GPS_HTTPS_DEPOSITAIRE_20261026 -->
+          <!-- 🟢 Coordonnées du dépositaire : valeurs modifiables. -->
+          <div class="field">
+            <label for="latitude">Latitude *</label>
+            <input
+              id="latitude"
+              name="latitude"
+              type="number"
+              step="any"
+              min="-90"
+              max="90"
+              required
+              placeholder="Ex : 42.566800"
+            />
+            <div class="hint">
+              <strong>
+                Important : après avoir copié les coordonnées depuis Google Maps,
+                collez-les d’abord dans une note pour séparer les deux valeurs.
+              </strong>
+              Le 1er nombre correspond à la latitude.
+              Exemple : 43.623405, 3.913315 → latitude = 43.623405.
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="longitude">Longitude *</label>
+            <input
+              id="longitude"
+              name="longitude"
+              type="number"
+              step="any"
+              min="-180"
+              max="180"
+              required
+              placeholder="Ex : 8.757200"
+            />
+            <div class="hint">
+              <strong>
+                Le 2e nombre correspond à la longitude.
+              </strong>
+              Recopiez-le ensuite séparément depuis votre note.
+              Exemple : 43.623405, 3.913315 → longitude = 3.913315.
+            </div>
+          </div>
+
           <div class="field full">
             <label for="comment">
               Informations utiles pour les pêcheurs
@@ -907,6 +953,23 @@
 
           <div class="form-section-title">
             Confirmations
+          </div>
+
+
+          <!-- 🟩 Confirmation GPS du dépositaire -->
+          <div class="field full">
+            <label class="checkbox">
+              <input
+                id="gps_confirmed"
+                name="gps_confirmed"
+                type="checkbox"
+                required
+              />
+              <span>
+                J’ai bien contrôlé les coordonnées GPS de mon établissement
+                afin qu’il puisse être localisé correctement.
+              </span>
+            </label>
           </div>
 
           <div class="field full">
@@ -1382,6 +1445,17 @@
           establishment.comment,
         );
 
+        // 🟩 GPS existant de la fiche chargée.
+        setFieldValue(
+          "latitude",
+          establishment.latitude,
+        );
+
+        setFieldValue(
+          "longitude",
+          establishment.longitude,
+        );
+
         setPmrStatus(
           establishment.pmr_status ||
           "to_verify",
@@ -1638,6 +1712,14 @@
           formData.set(
             "pmr_status",
             selectedPmr.value,
+          );
+
+          // 🟩 Confirmation explicite des coordonnées GPS.
+          formData.set(
+            "gps_confirmed",
+            document.getElementById("gps_confirmed").checked
+              ? "true"
+              : "false",
           );
 
           formData.set(
