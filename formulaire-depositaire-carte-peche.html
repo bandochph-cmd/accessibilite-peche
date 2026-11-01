@@ -848,6 +848,40 @@
               rows="3"
               placeholder="Informations complémentaires..."
             ></textarea>
+
+            <!-- 🟩 ZZZ_HTTPS_PREUVE_SECONDE_ACTIVITE_20261028 -->
+            <!-- 🟢 Lien justificatif facultatif — modifiable. -->
+            <label for="zzz_complementary_proof_url">
+              Lien HTTPS justifiant cette deuxième activité (facultatif)
+            </label>
+            <input
+              id="zzz_complementary_proof_url"
+              name="zzz_complementary_proof_url"
+              type="url"
+              maxlength="300"
+              pattern="https://.*"
+              placeholder="https://exemple.fr/page-officielle"
+            />
+
+            <!-- 🟩 ZZZ_HTTPS_DEUX_CODES_DISTINCTS_20261101 -->
+            <!-- 🟢 Code magasin facultatif, distinct du code dépositaire. -->
+            <label for="zzz_complementary_bait_shop_code">
+              Code professionnel du magasin d'appâts (facultatif)
+            </label>
+            <input
+              id="zzz_complementary_bait_shop_code"
+              name="zzz_complementary_bait_shop_code"
+              type="password"
+              autocomplete="off"
+              spellcheck="false"
+              maxlength="64"
+              placeholder="Code professionnel du magasin"
+            />
+            <div class="hint">
+              Ce second code permet de confirmer le rattachement
+              à votre fiche magasin existante. Sans ce code,
+              la demande de deuxième activité reste à vérifier.
+            </div>
           </div>
 
           <div class="form-section-title">
@@ -1708,6 +1742,25 @@
               : "",
           );
 
+          // 🟢 Transmettre le justificatif seulement si activité cochée.
+          formData.set(
+            "zzz_complementary_proof_url",
+            zzzComplementaryToggle.checked
+              ? zzzComplementaryProofUrl.value.trim()
+              : "",
+          );
+
+          // 🟩 ZZZ_HTTPS_DEUX_CODES_DISTINCTS_20261101
+          // 🟢 Ne transmettre le code magasin que si l'activité est cochée.
+          formData.set(
+            "zzz_complementary_bait_shop_code",
+            zzzComplementaryToggle.checked
+              ? document
+                  .getElementById("zzz_complementary_bait_shop_code")
+                  .value.trim()
+              : "",
+          );
+
 
           // 🟢 Le code n'est pas mis dans l'URL.
           formData.set(
@@ -1848,6 +1901,10 @@
 
     const zzzComplementaryComment =
       document.getElementById("zzz_complementary_comment");
+
+    // 🟢 Lien de preuve de la deuxième activité.
+    const zzzComplementaryProofUrl =
+      document.getElementById("zzz_complementary_proof_url");
 
     function zzzSynchroniserActiviteComplementaire() {
       const active = zzzComplementaryToggle.checked;
