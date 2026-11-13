@@ -551,26 +551,118 @@
             <div class="hint"><span id="counter">0</span>/500 caractères</div>
           </div>
 
+          <!-- 🟩 ZZZ_FORMULAIRE_PMR_5_PHOTOS_AMENITIES_20261113 -->
+          <!-- 🟩 Aménagements disponibles -->
           <div class="field full">
-            <label for="photo">Photo obligatoire *</label>
+            <label>Aménagements disponibles</label>
+
+            <div class="hint">
+              <!-- 🟢 Ces choix sont facultatifs et utilisent les valeurs Supabase existantes. -->
+              Cochez uniquement les équipements réellement disponibles dans l’établissement.
+            </div>
+
+            <label class="checkbox">
+              <input
+                id="amenity_parking"
+                name="amenities"
+                type="checkbox"
+                value="parking"
+              />
+              <span>Parking</span>
+            </label>
+
+            <label class="checkbox">
+              <input
+                id="amenity_restaurant"
+                name="amenities"
+                type="checkbox"
+                value="restaurant"
+              />
+              <span>Restaurant</span>
+            </label>
+
+            <label class="checkbox">
+              <input
+                id="amenity_toilets"
+                name="amenities"
+                type="checkbox"
+                value="toilets"
+              />
+              <span>Toilettes PMR</span>
+            </label>
+          </div>
+
+          <!-- 🟩 Photos de l’établissement : 1 obligatoire + 4 facultatives -->
+
+          <div class="field full">
+            <label for="photo_1">Photo de façade de l’établissement *</label>
             <input
-              id="photo"
-              name="photo"
+              id="photo_1"
+              name="photo_1"
               type="file"
               accept="image/jpeg,image/png,image/webp"
               required
             />
             <div class="hint">
+              <!-- 🟢 Photo principale obligatoire. -->
               Formats acceptés : JPG, PNG, WEBP. Taille maximum : 5 Mo.<br />
-              <!-- 🟢 Aide photo : visible par l’utilisateur avant envoi. -->
-              Ajoutez une photo qui met en valeur votre établissement dans son ensemble :
-              façade, entrée, extérieur, environnement, accueil ou vue générale.<br />
-              Évitez si possible les photos trop isolées d’une chambre ou de lits seuls.
-              L’objectif est d’aider les utilisateurs à identifier et découvrir votre établissement
-              avant de consulter votre site pour plus de détails.<br />
-              <!-- 🟢 Avertissement confidentialité photo : visible par l’utilisateur avant envoi. -->
-              Important : la photo ne doit pas contenir de visage identifiable, de plaque d’immatriculation,
-              de document personnel ou d’information privée.
+              Ajoutez une vue claire de la façade, de l’entrée ou de l’extérieur de l’établissement.<br />
+              Cette première photo sera utilisée comme photo principale.<br />
+              <!-- 🟢 Avertissement confidentialité. -->
+              Important : les photos ne doivent pas contenir de visage identifiable,
+              de plaque d’immatriculation, de document personnel ou d’information privée.
+            </div>
+          </div>
+
+          <div class="field full">
+            <label for="photo_2">Photo intérieure 1</label>
+            <input
+              id="photo_2"
+              name="photo_2"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+            />
+            <div class="hint">
+              Formats acceptés : JPG, PNG, WEBP. Taille maximum : 5 Mo.
+            </div>
+          </div>
+
+          <div class="field full">
+            <label for="photo_3">Photo intérieure 2</label>
+            <input
+              id="photo_3"
+              name="photo_3"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+            />
+            <div class="hint">
+              Formats acceptés : JPG, PNG, WEBP. Taille maximum : 5 Mo.
+            </div>
+          </div>
+
+          <div class="field full">
+            <label for="photo_4">Photo intérieure 3</label>
+            <input
+              id="photo_4"
+              name="photo_4"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+            />
+            <div class="hint">
+              Formats acceptés : JPG, PNG, WEBP. Taille maximum : 5 Mo.
+            </div>
+          </div>
+
+          <div class="field full">
+            <label for="photo_5">Photo intérieure 4</label>
+            <input
+              id="photo_5"
+              name="photo_5"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+            />
+            <div class="hint">
+              Formats acceptés : JPG, PNG, WEBP. Taille maximum : 5 Mo.
             </div>
           </div>
 
@@ -689,16 +781,46 @@
         return;
       }
 
-      const photo = document.getElementById("photo").files[0];
+      // 🟩 ============================================================
+      // 🟩 ZZZ_FORMULAIRE_PMR_5_PHOTOS_AMENITIES_20261113
+      // 🟩 Contrôle des 5 emplacements photo côté navigateur.
+      // 🟢 Photo 1 obligatoire ; photos 2 à 5 facultatives.
+      // 🟩 ============================================================
 
-      if (!photo) {
-        setMessage("error", "Une photo est obligatoire.");
+      const photoFieldIds = [
+        "photo_1",
+        "photo_2",
+        "photo_3",
+        "photo_4",
+        "photo_5",
+      ];
+
+      const photos = photoFieldIds.map(
+        (id) => document.getElementById(id).files[0] ?? null,
+      );
+
+      if (!photos[0]) {
+        setMessage(
+          "error",
+          "La photo de façade de l’établissement est obligatoire.",
+        );
         return;
       }
 
-      if (photo.size > MAX_PHOTO_BYTES) {
-        setMessage("error", "La photo est trop lourde. Maximum autorisé : 5 Mo.");
-        return;
+      for (let index = 0; index < photos.length; index += 1) {
+        const photo = photos[index];
+
+        if (!photo) {
+          continue;
+        }
+
+        if (photo.size > MAX_PHOTO_BYTES) {
+          setMessage(
+            "error",
+            `La photo ${index + 1} est trop lourde. Maximum autorisé : 5 Mo par photo.`,
+          );
+          return;
+        }
       }
 
       if (comment.value.length > MAX_COMMENT_LENGTH) {
