@@ -1,0 +1,286 @@
+<!-- 🟩 FICHIER : /home/bando/accessibilite-peche/modifier-hebergement-pmr.html -->
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>Retrouver mon hébergement PMR</title>
+  <style>
+    /* 🟩 Palette reprise du formulaire de création, sans thème parallèle. */
+    :root {
+      --primary: #1667b7; /* 🟢 modifiable */
+      --primary-dark: #0d4f91; /* 🟢 modifiable */
+      --background: #f3f7fb; /* 🟢 modifiable */
+      --card: #ffffff; /* 🟢 modifiable */
+      --text: #1d2733; /* 🟢 modifiable */
+      --muted: #5e6b78; /* 🟢 modifiable */
+      --border: #d8e1ea; /* 🟢 modifiable */
+      --error: #b42318; /* 🟢 modifiable */
+      --success: #027a48; /* 🟢 modifiable */
+      --radius: 18px; /* 🟢 modifiable */
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #eaf4ff, var(--background));
+    }
+    main { width: min(940px, 100%); margin: 0 auto; padding: 24px 16px 48px; /* 🟢 modifiable */ }
+    h1 { margin-top: 0; }
+    h2 { margin: 0 0 16px; }
+    p { line-height: 1.5; }
+    a { color: var(--primary-dark); }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px; /* 🟢 modifiable */
+      margin-top: 20px; /* 🟢 modifiable */
+    }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; /* 🟢 modifiable */ }
+    .full { grid-column: 1 / -1; }
+    label { display: block; font-weight: 700; margin-bottom: 8px; /* 🟢 modifiable */ }
+    input, select, textarea {
+      display: block; width: 100%; min-width: 0;
+      padding: 12px; /* 🟢 modifiable */
+      border: 1px solid var(--border); border-radius: 10px; /* 🟢 modifiable */
+      font: inherit; background: #fff; color: var(--text);
+    }
+    input:disabled, select:disabled, textarea:disabled { background: var(--background); opacity: 1; }
+    textarea { resize: vertical; min-height: 108px; /* 🟢 modifiable */ }
+    button {
+      border: 0; border-radius: 10px; /* 🟢 modifiable */
+      padding: 12px 18px; /* 🟢 modifiable */
+      font: inherit; font-weight: 700; background: var(--primary);
+      color: white; cursor: pointer;
+    }
+    button:disabled { opacity: .65; cursor: not-allowed; }
+    .muted { color: var(--muted); }
+    .message { min-height: 1.5em; margin-top: 12px; }
+    .message.error { color: var(--error); }
+    .message.success { color: var(--success); }
+    .amenities { display: flex; flex-wrap: wrap; gap: 10px; /* 🟢 modifiable */ }
+    .amenities label { display: inline-flex; align-items: center; gap: 7px; font-weight: 400; margin: 0; }
+    .amenities input { width: auto; }
+    .photos { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 12px; /* 🟢 modifiable */ }
+    .photo { margin: 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+    .photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+    .photo figcaption { padding: 8px; font-size: .9rem; /* 🟢 modifiable */ }
+    .photo-empty { padding: 20px 8px; text-align: center; color: var(--muted); }
+    .notice { border-left: 4px solid var(--primary); padding-left: 12px; /* 🟢 modifiable */ }
+    [hidden] { display: none !important; }
+    @media (max-width: 650px) {
+      .grid { grid-template-columns: 1fr; }
+      .card { padding: 16px; } /* 🟢 modifiable */
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p><a href="hebergements-pmr.html">← Retour aux hébergements PMR</a></p>
+    <h1>Retrouver mon hébergement PMR</h1>
+    <p class="muted">Saisissez votre code établissement pour consulter votre fiche actuelle. Le formulaire de modification et son envoi seront activés après la mise en place de la validation administrative.</p>
+
+    <!-- 🟩 Lecture de la fiche par code, jamais par UUID fourni par l'utilisateur. -->
+    <section class="card" aria-label="Accès à mon hébergement">
+      <h2>Mon code établissement</h2>
+      <form id="accessForm" autocomplete="off">
+        <label for="referenceCode">Code reçu par e-mail</label>
+        <input id="referenceCode" type="text" required maxlength="64"
+          placeholder="HEB-XXXX-XXXX-XXXX-XXXX"
+          autocapitalize="characters" spellcheck="false" autocomplete="off" />
+        <p><button id="loadButton" type="submit">Retrouver ma fiche</button></p>
+      </form>
+      <p><a href="recuperation-code-hebergement-pmr.html">J'ai perdu mon code</a></p>
+      <p id="message" class="message" role="status" aria-live="polite"></p>
+    </section>
+
+    <!-- 🟩 Aperçu prérempli, sans écriture dans Supabase. -->
+    <section id="ficheSection" class="card" hidden aria-label="Fiche actuelle de l'hébergement">
+      <h2>Ma fiche actuelle</h2>
+      <p id="statutFiche" class="muted"></p>
+      <p class="notice">Consultation uniquement pour le moment : aucune correction n'est enregistrée depuis cette page.</p>
+      <fieldset disabled>
+        <div class="grid">
+          <div class="full">
+            <label for="editTitle">Nom de l'établissement</label>
+            <input id="editTitle" type="text" maxlength="120" />
+          </div>
+          <div>
+            <label for="editType">Type d'hébergement</label>
+            <select id="editType">
+              <option value="camping">Camping</option>
+              <option value="hotel">Hôtel</option>
+              <option value="gite">Gîte</option>
+              <option value="bed_breakfast">Chambre d'hôtes</option>
+            </select>
+          </div>
+          <div>
+            <label for="editEmail">E-mail de contact</label>
+            <input id="editEmail" type="email" />
+          </div>
+          <div class="full">
+            <label for="editWebsite">Site web HTTPS</label>
+            <input id="editWebsite" type="url" />
+          </div>
+          <div>
+            <label for="editLatitude">Latitude</label>
+            <input id="editLatitude" type="number" step="any" />
+          </div>
+          <div>
+            <label for="editLongitude">Longitude</label>
+            <input id="editLongitude" type="number" step="any" />
+          </div>
+          <div class="full">
+            <label for="editComment">Description</label>
+            <textarea id="editComment" maxlength="500"></textarea>
+          </div>
+          <div class="full">
+            <p><strong>Aménagements enregistrés</strong></p>
+            <div id="amenities" class="amenities"></div>
+          </div>
+        </div>
+      </fieldset>
+      <h2 style="margin-top:24px">Photos existantes</h2>
+      <div id="photos" class="photos"></div>
+      <p><button type="button" disabled>Enregistrement des modifications à venir</button></p>
+    </section>
+  </main>
+
+  <script>
+    // 🟩 Service de lecture déjà déployé et testé avec le code renouvelé.
+    const EDGE_URL =
+      "https://zentyfamwemsyeqcbwle.supabase.co/functions/v1/" +
+      "load-pmr-accommodation-reference";
+
+    // 🟩 Noms en français basés sur l'enum public.amenity_type.
+    const AMENAGEMENTS = [
+      ["parking", "Parking"],
+      ["toilets", "Toilettes"],
+      ["shelter", "Abri"],
+      ["restaurant", "Restaurant"],
+      ["bait_shop", "Magasin d'appâts"],
+      ["accommodation", "Hébergement"],
+      ["wifi", "Wi-Fi"],
+      ["electric_hookup", "Branchement électrique"],
+    ];
+
+    const form = document.getElementById("accessForm");
+    const codeInput = document.getElementById("referenceCode");
+    const button = document.getElementById("loadButton");
+    const message = document.getElementById("message");
+    const section = document.getElementById("ficheSection");
+
+    function afficherMessage(texte, type = "") {
+      message.textContent = texte; // 🟢 Pas d'injection HTML.
+      message.className = `message ${type}`;
+    }
+
+    function remplirFiche(fiche) {
+      // 🟩 Correspondance exacte avec les champs du formulaire de création.
+      document.getElementById("editTitle").value = fiche.title ?? "";
+      document.getElementById("editType").value = fiche.type ?? "";
+      document.getElementById("editEmail").value = fiche.contact_email ?? "";
+      document.getElementById("editWebsite").value = fiche.source_url ?? "";
+      document.getElementById("editLatitude").value = fiche.latitude ?? "";
+      document.getElementById("editLongitude").value = fiche.longitude ?? "";
+      document.getElementById("editComment").value = fiche.comment ?? "";
+
+      const statut = {
+        to_check: "En attente de vérification",
+        validated: "Validé",
+        rejected: "Refusé",
+      };
+      document.getElementById("statutFiche").textContent =
+        `État de la fiche : ${statut[fiche.status] ?? "À vérifier"}`;
+
+      // 🟩 Affichage exact des aménagements présents, sans les modifier.
+      const valeurs = new Set(
+        Array.isArray(fiche.amenities) ? fiche.amenities : [],
+      );
+      const amenagements = document.getElementById("amenities");
+      amenagements.replaceChildren();
+      for (const [valeur, libelle] of AMENAGEMENTS) {
+        const label = document.createElement("label");
+        const caseACocher = document.createElement("input");
+        caseACocher.type = "checkbox";
+        caseACocher.checked = valeurs.has(valeur);
+        caseACocher.disabled = true;
+        label.append(caseACocher, document.createTextNode(libelle));
+        amenagements.appendChild(label);
+      }
+
+      // 🟩 Afficher les cinq photos sans exiger de nouvel envoi.
+      const zonePhotos = document.getElementById("photos");
+      zonePhotos.replaceChildren();
+      const photos = Array.isArray(fiche.photos) ? fiche.photos : [];
+      for (let index = 0; index < 5; index += 1) {
+        const figure = document.createElement("figure");
+        figure.className = "photo";
+        const url = photos[index];
+        if (typeof url === "string" && /^https:\/\//i.test(url)) {
+          const image = document.createElement("img");
+          image.src = url;
+          image.alt = `Photo existante ${index + 1}`;
+          image.loading = "lazy";
+          image.referrerPolicy = "no-referrer";
+          figure.appendChild(image);
+        } else {
+          const absence = document.createElement("div");
+          absence.className = "photo-empty";
+          absence.textContent = "Aucune photo";
+          figure.appendChild(absence);
+        }
+        const legende = document.createElement("figcaption");
+        legende.textContent = `Emplacement photo ${index + 1}`;
+        figure.appendChild(legende);
+        zonePhotos.appendChild(figure);
+      }
+    }
+
+    form.addEventListener("submit", async (evenement) => {
+      evenement.preventDefault();
+      section.hidden = true;
+      afficherMessage("");
+      const referenceCode = codeInput.value.trim();
+      if (!referenceCode) {
+        afficherMessage("Saisissez votre code établissement.", "error");
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Recherche en cours…";
+      try {
+        const reponse = await fetch(EDGE_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ referenceCode }),
+          cache: "no-store",
+        });
+        const resultat = await reponse.json().catch(() => null);
+        if (!reponse.ok || resultat?.ok !== true || !resultat.establishment) {
+          throw new Error(
+            typeof resultat?.message === "string"
+              ? resultat.message
+              : "Impossible de retrouver votre établissement.",
+          );
+        }
+        remplirFiche(resultat.establishment);
+        codeInput.value = ""; // 🟢 Aucun code stocké sur la page après lecture.
+        section.hidden = false;
+        afficherMessage("Fiche retrouvée. Consultation sécurisée active.", "success");
+      } catch (erreur) {
+        afficherMessage(
+          erreur instanceof Error ? erreur.message : "Erreur de connexion.",
+          "error",
+        );
+      } finally {
+        button.disabled = false;
+        button.textContent = "Retrouver ma fiche";
+      }
+    });
+  </script>
+</body>
+</html>
