@@ -1,0 +1,562 @@
+<!-- 🟩 FICHIER : /home/bando/accessibilite-peche/recuperation-code-hebergement-pmr.html -->
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="referrer" content="no-referrer">
+
+  <!-- 🟩 Protection Cloudflare Turnstile -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+  <title>Récupérer mon code établissement — Accessibilité Pêche</title>
+
+  <style>
+    /* 🟩 COULEURS REPRISES DU FORMULAIRE PMR EXISTANT */
+    :root {
+      --primary: #1667b7; /* 🟢 modifiable */
+      --primary-dark: #0d4f91; /* 🟢 modifiable */
+      --background: #f3f7fb; /* 🟢 modifiable */
+      --card: #ffffff; /* 🟢 modifiable */
+      --text: #1d2733; /* 🟢 modifiable */
+      --muted: #5e6b78; /* 🟢 modifiable */
+      --border: #d8e1ea; /* 🟢 modifiable */
+      --error: #b42318; /* 🟢 modifiable */
+      --success: #027a48; /* 🟢 modifiable */
+      --radius: 18px; /* 🟢 modifiable */
+      --shadow: 0 12px 32px rgba(15, 35, 55, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: linear-gradient(
+        180deg,
+        #eaf4ff 0%,
+        var(--background) 48%
+      );
+      min-height: 100vh;
+    }
+
+    .page {
+      width: min(940px, 100%);
+      margin: 0 auto;
+      padding: 28px 16px 48px; /* 🟢 modifiable */
+    }
+
+    .retour {
+      display: inline-block;
+      margin-bottom: 24px; /* 🟢 modifiable */
+      color: var(--primary-dark);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .retour:hover {
+      text-decoration: underline;
+    }
+
+    .hero {
+      margin-bottom: 24px; /* 🟢 modifiable */
+      text-align: center;
+    }
+
+    .hero h1 {
+      margin: 0 0 12px;
+      font-size: clamp(26px, 4vw, 40px);
+      line-height: 1.12;
+      color: var(--primary-dark);
+    }
+
+    .hero p {
+      margin: 0 auto;
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.55;
+    }
+
+    .card {
+      max-width: 700px;
+      margin: 0 auto;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 28px; /* 🟢 modifiable */
+    }
+
+    .card h2 {
+      color: var(--primary-dark);
+      margin: 0 0 16px;
+      font-size: 22px; /* 🟢 modifiable */
+    }
+
+    .explication {
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    label {
+      display: block;
+      margin: 18px 0 7px;
+      font-weight: 600;
+    }
+
+    input {
+      display: block;
+      width: 100%;
+      padding: 13px 14px; /* 🟢 modifiable */
+      font: inherit;
+      color: var(--text);
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+    }
+
+    input:focus-visible,
+    button:focus-visible,
+    a:focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 3px;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      margin-top: 24px;
+      padding: 14px 18px; /* 🟢 modifiable */
+      font: inherit;
+      font-weight: 700;
+      color: white;
+      background: var(--primary);
+      border: 0;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    button:hover:not(:disabled) {
+      background: var(--primary-dark);
+    }
+
+    button:disabled {
+      opacity: 0.6; /* 🟢 modifiable */
+      cursor: wait;
+    }
+
+    .message {
+      margin-top: 20px;
+      padding: 16px; /* 🟢 modifiable */
+      border-radius: 12px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .message.success {
+      color: var(--success);
+      background: #e8f7ef;
+    }
+
+    .message.error {
+      color: var(--error);
+      background: #fff0ee;
+    }
+
+    .code-box {
+      margin-top: 22px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      text-align: center;
+      background: var(--background);
+    }
+
+    .code-value {
+      display: block;
+      margin: 16px 0;
+      font-size: clamp(17px, 3vw, 24px);
+      font-weight: 700;
+      color: var(--primary-dark);
+      letter-spacing: 1px; /* 🟢 modifiable */
+      overflow-wrap: anywhere;
+      user-select: all;
+    }
+
+    .note {
+      font-size: 14px; /* 🟢 modifiable */
+      line-height: 1.6;
+      color: var(--muted);
+    }
+
+    @media (max-width: 600px) {
+      .page {
+        padding: 20px 12px 36px; /* 🟢 modifiable */
+      }
+
+      .card {
+        padding: 20px 16px; /* 🟢 modifiable */
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+
+    <a class="retour" href="hebergements-pmr.html">
+      ← Retour aux hébergements PMR
+    </a>
+
+    <header class="hero">
+      <h1>Récupérer mon code établissement</h1>
+      <p>
+        Retrouvez l'accès à votre hébergement référencé
+        sur Accessibilité Pêche.
+      </p>
+    </header>
+
+    <!-- 🟩 DEMANDE DE RÉCUPÉRATION -->
+    <section class="card" id="demandeSection">
+      <h2>Demander un nouveau code</h2>
+
+      <p class="explication">
+        Indiquez le nom exact de votre hébergement
+        et l'adresse e-mail utilisée lors de son référencement.
+        Si les informations correspondent, vous recevrez
+        un lien sécurisé valable 15 minutes.
+      </p>
+
+      <form id="demandeForm">
+
+        <label for="nomEtablissement">
+          Nom de l'établissement
+        </label>
+        <input
+          id="nomEtablissement"
+          type="text"
+          maxlength="120"
+          autocomplete="organization"
+          required
+        >
+
+        <label for="email">
+          Adresse e-mail de contact
+        </label>
+        <input
+          id="email"
+          type="email"
+          maxlength="180"
+          autocomplete="email"
+          required
+        >
+
+        <!-- 🟩 Vérification anti-robots -->
+        <!-- 🟢 Clé publique Cloudflare, modifiable. -->
+        <div
+          class="cf-turnstile"
+          data-sitekey="0x4AAAAAAGApEZ1tMpy7hZCB"
+          data-theme="light"
+        ></div>
+
+        <button type="submit" id="demandeBouton">
+          Recevoir mon lien de récupération
+        </button>
+      </form>
+
+      <p
+        id="demandeMessage"
+        class="message"
+        role="status"
+        aria-live="polite"
+        hidden
+      ></p>
+
+      <p class="note">
+        Si vous n'avez plus accès à votre ancienne adresse
+        e-mail, contactez l'équipe Accessibilité Pêche
+        depuis votre adresse officielle de contact habituelle.
+      </p>
+    </section>
+
+    <!-- 🟩 CONFIRMATION DU LIEN REÇU -->
+    <section class="card" id="confirmationSection" hidden>
+      <h2>Confirmer le renouvellement</h2>
+
+      <p class="explication">
+        Votre lien personnel permet de remplacer votre
+        ancien code établissement par un nouveau.
+        L'ancien code ne fonctionnera plus.
+      </p>
+
+      <button type="button" id="confirmationBouton">
+        Renouveler mon code établissement
+      </button>
+
+      <p
+        id="confirmationMessage"
+        class="message"
+        role="status"
+        aria-live="polite"
+        hidden
+      ></p>
+
+      <div class="code-box" id="codeSection" hidden>
+        <strong>Votre nouveau code établissement</strong>
+
+        <output class="code-value" id="codeValeur"></output>
+
+        <p class="note">
+          Conservez ce code confidentiellement.
+          Il vous permettra de retrouver votre fiche
+          pour la modifier ultérieurement.
+        </p>
+
+        <button type="button" id="copierBouton">
+          Copier mon code
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // 🟩 PAGE RÉCUPÉRATION — COMMUNICATION SUPABASE
+    (() => {
+      "use strict";
+
+      // 🟢 URL du service indépendant (modifiable si projet changé).
+      const EDGE_URL =
+        "https://zentyfamwemsyeqcbwle.supabase.co/functions/v1/recover-pmr-accommodation-code";
+
+      const demandeSection =
+        document.getElementById("demandeSection");
+      const confirmationSection =
+        document.getElementById("confirmationSection");
+
+      const demandeForm =
+        document.getElementById("demandeForm");
+      const demandeBouton =
+        document.getElementById("demandeBouton");
+      const demandeMessage =
+        document.getElementById("demandeMessage");
+
+      const confirmationBouton =
+        document.getElementById("confirmationBouton");
+      const confirmationMessage =
+        document.getElementById("confirmationMessage");
+      const codeSection =
+        document.getElementById("codeSection");
+      const codeValeur =
+        document.getElementById("codeValeur");
+      const copierBouton =
+        document.getElementById("copierBouton");
+
+      // 🟩 MESSAGES — sans insertion de HTML non fiable.
+      function afficherMessage(element, type, texte) {
+        element.hidden = false;
+        element.className = `message ${type}`;
+        element.textContent = texte;
+      }
+
+      // 🟩 APPEL AU SERVICE
+      async function appelerService(payload) {
+        const response = await fetch(EDGE_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+          cache: "no-store",
+          referrerPolicy: "no-referrer",
+        });
+
+        const resultat = await response.json().catch(() => null);
+
+        if (!response.ok || !resultat || resultat.ok !== true) {
+          throw new Error(
+            resultat?.message ||
+            "Le service est momentanément indisponible.",
+          );
+        }
+
+        return resultat;
+      }
+
+      // 🟩 DEMANDE D'UN LIEN PAR E-MAIL
+      demandeForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        demandeBouton.disabled = true;
+        demandeMessage.hidden = true;
+
+        try {
+          const nomEtablissement =
+            document.getElementById("nomEtablissement")
+              .value.trim();
+
+          const email =
+            document.getElementById("email")
+              .value.trim();
+
+          // 🟩 Jeton de vérification Cloudflare.
+          const turnstileToken =
+            window.turnstile?.getResponse?.() ?? "";
+
+          if (!turnstileToken) {
+            afficherMessage(
+              demandeMessage,
+              "error",
+              "Veuillez effectuer la vérification de sécurité.",
+            );
+            return;
+          }
+
+          const resultat = await appelerService({
+            action: "demander",
+            nomEtablissement,
+            email,
+            turnstileToken,
+          });
+
+          // 🟢 Réponse volontairement générique.
+          afficherMessage(
+            demandeMessage,
+            "success",
+            resultat.message,
+          );
+        } catch (_) {
+          afficherMessage(
+            demandeMessage,
+            "error",
+            "Impossible de traiter la demande pour le moment. " +
+            "Veuillez réessayer ultérieurement.",
+          );
+        } finally {
+          demandeBouton.disabled = false;
+
+          // 🟢 Jeton à usage unique : renouveler le contrôle.
+          window.turnstile?.reset?.();
+        }
+      });
+
+      // 🟩 RÉCEPTION DU JETON DE RÉCUPÉRATION
+      // 🟢 Il arrive dans le fragment #jeton=...
+      // 🟢 Il n'est pas conservé dans un stockage persistant.
+      const parametres = new URLSearchParams(
+        window.location.hash.slice(1),
+      );
+
+      let jeton = parametres.get("jeton");
+
+      if (jeton !== null) {
+        // 🟢 Retirer le jeton de la barre d'adresse.
+        window.history.replaceState(
+          null,
+          "",
+          window.location.pathname + window.location.search,
+        );
+
+        demandeSection.hidden = true;
+        confirmationSection.hidden = false;
+
+        if (!/^[0-9a-f]{64}$/.test(jeton)) {
+          confirmationBouton.disabled = true;
+
+          afficherMessage(
+            confirmationMessage,
+            "error",
+            "Lien de récupération invalide ou expiré.",
+          );
+
+          jeton = null;
+        }
+      }
+
+      // 🟩 CONFIRMER LE RENOUVELLEMENT
+      confirmationBouton.addEventListener("click", async () => {
+        if (!jeton) {
+          return;
+        }
+
+        confirmationBouton.disabled = true;
+        confirmationMessage.hidden = true;
+
+        try {
+          const resultat = await appelerService({
+            action: "confirmer",
+            jeton,
+          });
+
+          const nouveauCode =
+            typeof resultat.codeEtablissement === "string"
+              ? resultat.codeEtablissement.trim()
+              : "";
+
+          // 🟢 Contrat du code HEB existant.
+          if (!/^HEB-(?:[A-HJ-NP-Z2-9]{4}-){3}[A-HJ-NP-Z2-9]{4}$/.test(
+            nouveauCode,
+          )) {
+            throw new Error("Réponse de renouvellement incomplète.");
+          }
+
+          // 🟢 Ne pas réutiliser le lien.
+          jeton = null;
+
+          codeValeur.textContent = nouveauCode;
+          codeSection.hidden = false;
+          confirmationBouton.hidden = true;
+
+          afficherMessage(
+            confirmationMessage,
+            "success",
+            resultat.emailEnvoye === true
+              ? "Votre code a été renouvelé et envoyé par e-mail."
+              : "Votre code a été renouvelé. Copiez-le maintenant : " +
+                "l'e-mail de confirmation n'a pas pu être envoyé.",
+          );
+        } catch (erreur) {
+          afficherMessage(
+            confirmationMessage,
+            "error",
+            erreur instanceof Error
+              ? erreur.message
+              : "Renouvellement impossible.",
+          );
+
+          // 🟢 Autoriser une nouvelle tentative uniquement
+          // 🟢 si le jeton local est encore disponible.
+          confirmationBouton.disabled = !jeton;
+        }
+      });
+
+      // 🟩 COPIER LE NOUVEAU CODE
+      copierBouton.addEventListener("click", async () => {
+        const code = codeValeur.textContent.trim();
+
+        if (!code) {
+          return;
+        }
+
+        try {
+          await navigator.clipboard.writeText(code);
+          copierBouton.textContent = "Code copié";
+        } catch (_) {
+          copierBouton.textContent =
+            "Sélectionnez le code affiché pour le copier";
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
