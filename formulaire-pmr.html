@@ -864,6 +864,70 @@
           "Votre demande a bien été prise en compte. Elle sera vérifiée avant publication et, si elle est conforme, pourra être visible dans l’application sous 24 heures.",
         );
 
+        // 🟩 CODE ÉTABLISSEMENT — REMISE APRÈS CRÉATION
+        // 🟢 Insertion DOM sécurisée : aucun HTML utilisateur injecté.
+        // 🟢 Aucun changement des champs, photos ou aménagements.
+        const referenceCode =
+          typeof data.referenceCode === "string"
+            ? data.referenceCode.trim()
+            : "";
+
+        const validReferenceCode =
+          /^HEB-(?:[A-HJ-NP-Z2-9]{4}-){3}[A-HJ-NP-Z2-9]{4}$/.test(
+            referenceCode,
+          );
+
+        if (validReferenceCode) {
+          const codeLine = document.createElement("p");
+          codeLine.textContent =
+            `Votre code établissement : ${referenceCode}`;
+          codeLine.style.fontWeight = "bold";
+          codeLine.style.overflowWrap = "anywhere";
+
+          const advice = document.createElement("p");
+          advice.textContent =
+            "Conservez ce code confidentiel pour pouvoir modifier " +
+            "votre hébergement ultérieurement.";
+
+          const copyButton = document.createElement("button");
+          copyButton.type = "button";
+          copyButton.textContent = "Copier mon code";
+          copyButton.style.marginTop = "10px"; // 🟢 modifiable
+          copyButton.setAttribute(
+            "aria-label",
+            "Copier le code établissement",
+          );
+
+          copyButton.addEventListener("click", async () => {
+            try {
+              await navigator.clipboard.writeText(referenceCode);
+              copyButton.textContent = "Code copié";
+            } catch (_) {
+              copyButton.textContent =
+                "Copie indisponible : sélectionnez le code affiché";
+            }
+          });
+
+          message.append(codeLine, advice, copyButton);
+
+          if (data.submitterAcknowledgementSent === false) {
+            const warning = document.createElement("p");
+            warning.textContent =
+              "L’e-mail de confirmation n’a pas pu être envoyé. " +
+              "Copiez et conservez votre code dès maintenant.";
+            message.appendChild(warning);
+          }
+        } else {
+          // 🟢 La demande est déjà enregistrée.
+          // 🟢 Ne jamais inciter à créer une seconde fiche.
+          const warning = document.createElement("p");
+          warning.textContent =
+            "Aucun code établissement n’a été retourné. " +
+            "Vérifiez votre e-mail de confirmation ou contactez-nous. " +
+            "Ne renvoyez pas ce formulaire.";
+          message.appendChild(warning);
+        }
+
         form.reset();
         updateCounter();
       } catch (error) {
