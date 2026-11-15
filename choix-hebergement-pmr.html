@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<!-- 🟩 FICHIER : choix-hebergement-pmr.html -->
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Créer ou modifier mon hébergement PMR — Accessibilité Pêche</title>
+  <style>
+    :root {
+      --primary: #1269ac; /* 🟢 Couleur modifiable */
+      --text: #18334d;
+      --border: #cbdfea;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #eaf4ff, #ffffff);
+    }
+    main {
+      max-width: 850px; /* 🟢 Largeur modifiable */
+      margin: auto;
+      padding: 32px 16px 48px; /* 🟢 Marges modifiables */
+    }
+    h1 {
+      color: #10548d;
+      text-align: center;
+      margin: 32px 0 16px;
+    }
+    .intro {
+      text-align: center;
+      line-height: 1.6;
+      margin-bottom: 30px; /* 🟢 Modifiable */
+    }
+    .choix {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px; /* 🟢 Espacement modifiable */
+    }
+    .carte {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 26px 22px; /* 🟢 Modifiable */
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px; /* 🟢 Modifiable */
+      color: var(--text);
+      text-decoration: none;
+      box-shadow: 0 5px 18px #123e6514;
+    }
+    .carte:hover, .carte:focus-visible {
+      border-color: var(--primary);
+      outline-offset: 3px;
+    }
+    .carte strong {
+      color: #10548d;
+      font-size: 1.25rem; /* 🟢 Modifiable */
+    }
+    .carte span {
+      line-height: 1.5;
+    }
+    .bouton {
+      display: block;
+      margin-top: auto;
+      padding: 12px; /* 🟢 Modifiable */
+      background: var(--primary);
+      border-radius: 9px;
+      text-align: center;
+      color: white;
+      font-weight: bold;
+    }
+    .aide {
+      margin-top: 28px;
+      text-align: center;
+      line-height: 1.6;
+    }
+    a { color: #10548d; }
+    @media (max-width: 650px) {
+      .choix { grid-template-columns: 1fr; }
+      h1 { font-size: 1.65rem; } /* 🟢 Modifiable */
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <a href="hebergements-pmr.html">
+      ← Retour aux hébergements PMR
+    </a>
+
+    <h1>Votre hébergement PMR</h1>
+
+    <p class="intro">
+      Vous souhaitez référencer un nouvel hébergement
+      ou modifier un établissement déjà enregistré ?
+      Choisissez votre démarche.
+    </p>
+
+    <!-- 🟩 Création : formulaire existant -->
+    <section class="choix" aria-label="Choisir une démarche">
+      <a class="carte" href="formulaire-pmr.html">
+        <strong>Créer mon hébergement PMR</strong>
+        <span>
+          Mon établissement n'est pas encore référencé.
+          Je souhaite remplir une nouvelle fiche.
+        </span>
+        <span class="bouton">Créer mon hébergement</span>
+      </a>
+
+      <!-- 🟩 Modification : fiche existante par code HEB -->
+      <a class="carte" href="modifier-hebergement-pmr.html">
+        <strong>Modifier mon hébergement PMR</strong>
+        <span>
+          Mon établissement est déjà enregistré.
+          Je saisis mon code établissement pour retrouver
+          et modifier ma fiche existante.
+        </span>
+        <span class="bouton">Retrouver ma fiche</span>
+      </a>
+    </section>
+
+    <p class="aide">
+      Vous avez perdu votre code établissement ?
+      <a href="recuperation-code-hebergement-pmr.html">
+        Récupérer mon code
+      </a>
+    </p>
+  </main>
+</body>
+</html>
