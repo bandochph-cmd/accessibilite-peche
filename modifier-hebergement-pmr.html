@@ -101,7 +101,7 @@
     <section id="ficheSection" class="card" hidden aria-label="Fiche actuelle de l'hébergement">
       <h2>Ma fiche actuelle</h2>
       <p id="statutFiche" class="muted"></p>
-      <p class="notice">Proposez vos corrections ci-dessous. Elles seront examinées avant toute modification de votre fiche publiée.</p>
+      <p class="notice">Modifiez vos informations ci-dessous. Elles seront enregistrées dans votre fiche.</p>
       <fieldset>
         <div class="grid">
           <div class="full">
@@ -155,14 +155,14 @@
       <p>
         <label>
           <input id="publicationConsent" type="checkbox" />
-          J'autorise l'examen de mes corrections en vue de leur publication après vérification.
+          Je confirme vouloir enregistrer ces corrections dans ma fiche.
         </label>
       </p>
 
       <!-- 🟩 Une demande, jamais une modification directe de la fiche. -->
       <p>
         <button id="submitChangesButton" type="button">
-          Envoyer ma demande de modification
+          Enregistrer mes modifications
         </button>
       </p>
       <p id="submitChangesMessage"
@@ -291,7 +291,7 @@
       if (!document.getElementById("pmrConfirmed").checked ||
           !document.getElementById("publicationConsent").checked) {
         messageEnvoi.textContent =
-          "Veuillez confirmer l'accessibilité et autoriser l'examen de votre demande.";
+          "Veuillez confirmer l'accessibilité et l'enregistrement de vos modifications.";
         messageEnvoi.className = "message error";
         return;
       }
@@ -391,8 +391,8 @@
         codeCharge = "";
         demandeEnvoyee = true;
         messageEnvoi.textContent =
-          "Votre demande de modification a été enregistrée. " +
-          "Elle sera vérifiée avant toute application.";
+          "Votre hébergement a été mis à jour. " +
+          "Vos nouvelles informations sont enregistrées.";
         messageEnvoi.className = "message success";
 
       } catch (erreur) {
@@ -407,8 +407,8 @@
       } finally {
         envoyerButton.disabled = demandeEnvoyee;
         envoyerButton.textContent = demandeEnvoyee
-          ? "Demande envoyée"
-          : "Envoyer ma demande de modification";
+          ? "Modifications enregistrées"
+          : "Enregistrer mes modifications";
       }
     });
 
@@ -417,7 +417,7 @@
       section.hidden = true;
       codeCharge = "";
       envoyerButton.disabled = false;
-      envoyerButton.textContent = "Envoyer ma demande de modification";
+      envoyerButton.textContent = "Enregistrer mes modifications";
       messageEnvoi.textContent = "";
       messageEnvoi.className = "message";
       afficherMessage("");
@@ -448,7 +448,7 @@
         codeCharge = referenceCode; // 🟢 Mémoire temporaire uniquement.
         codeInput.value = ""; // 🟢 Aucun code stocké sur la page après lecture.
         section.hidden = false;
-        afficherMessage("Fiche retrouvée. Vous pouvez proposer une modification.", "success");
+        afficherMessage("Fiche retrouvée. Vous pouvez modifier les informations.", "success");
       } catch (erreur) {
         afficherMessage(
           erreur instanceof Error ? erreur.message : "Erreur de connexion.",
