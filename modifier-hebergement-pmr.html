@@ -64,6 +64,21 @@
     .amenities { display: flex; flex-wrap: wrap; gap: 10px; /* 🟢 modifiable */ }
     .amenities label { display: inline-flex; align-items: center; gap: 7px; font-weight: 400; margin: 0; }
     .amenities input { width: auto; }
+    /* 🟩 Confirmations PMR : case à gauche du texte. */
+    .pmr-confirmation {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px; /* 🟢 modifiable : espace case / texte */
+    }
+    .pmr-confirmation input[type="checkbox"] {
+      display: block;
+      width: 18px; /* 🟢 modifiable : taille */
+      min-width: 18px;
+      height: 18px; /* 🟢 modifiable : taille */
+      flex: 0 0 18px;
+      padding: 0;
+      margin: 2px 0 0; /* 🟢 modifiable : alignement vertical */
+    }
     .photos { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: 12px; /* 🟢 modifiable */ }
     .photo { margin: 0; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
     .photo img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
@@ -147,13 +162,13 @@
       <div id="photos" class="photos"></div>
       <!-- 🟩 Confirmations obligatoires avant l'envoi. -->
       <p>
-        <label>
+        <label class="pmr-confirmation">
           <input id="pmrConfirmed" type="checkbox" />
           Je confirme que cet hébergement propose bien des aménagements accessibles aux personnes à mobilité réduite.
         </label>
       </p>
       <p>
-        <label>
+        <label class="pmr-confirmation">
           <input id="publicationConsent" type="checkbox" />
           Je confirme vouloir enregistrer ces corrections dans ma fiche.
         </label>
