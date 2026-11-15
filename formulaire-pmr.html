@@ -406,6 +406,32 @@
       }
     }
 
+
+    /* 🟩 PMR — photos existantes en mode modification */
+    [hidden] {
+      display: none !important;
+    }
+
+    .pmr-existing-photo {
+      margin-top: 10px; /* 🟢 modifiable */
+      border: 1px solid var(--border);
+      border-radius: 10px; /* 🟢 modifiable */
+      padding: 8px; /* 🟢 modifiable */
+      background: var(--background);
+    }
+
+    .pmr-existing-photo img {
+      display: block;
+      width: 100%;
+      max-height: 220px; /* 🟢 modifiable */
+      object-fit: contain;
+      border-radius: 6px; /* 🟢 modifiable */
+    }
+
+    .pmr-existing-photo p {
+      margin: 6px 0 0; /* 🟢 modifiable */
+      color: var(--muted);
+    }
   </style>
 </head>
 
@@ -433,6 +459,52 @@
     </section>
 
     <section class="card" aria-label="Formulaire de référencement PMR">
+      <!-- 🟩 ZZZ_PMR_FORMULAIRE_UNIFIE_20261115 -->
+      <!-- 🟢 Accès visible uniquement en mode modification. -->
+      <div id="pmrCodeGate" hidden>
+        <h2>Retrouver mon hébergement PMR</h2>
+        <p>
+          Saisissez votre code établissement pour retrouver
+          votre fiche originale et ses informations.
+        </p>
+
+        <form id="pmrCodeForm" autocomplete="off">
+          <div class="field">
+            <label for="pmrReferenceCode">
+              Mon code établissement
+            </label>
+            <input
+              id="pmrReferenceCode"
+              type="text"
+              maxlength="64"
+              required
+              autocomplete="off"
+              autocapitalize="characters"
+              spellcheck="false"
+              placeholder="HEB-XXXX-XXXX-XXXX-XXXX"
+            />
+          </div>
+
+          <p>
+            <button type="submit">
+              Retrouver ma fiche
+            </button>
+          </p>
+        </form>
+
+        <p>
+          <a href="recuperation-code-hebergement-pmr.html">
+            J'ai perdu mon code
+          </a>
+        </p>
+
+        <p id="pmrCodeMessage"
+           class="message"
+           role="status"
+           aria-live="polite"></p>
+      </div>
+
+      <!-- 🟢 Formulaire original conservé pour les deux modes. -->
       <form id="pmrForm">
         <div class="grid">
           <div class="field full">
@@ -745,6 +817,407 @@
       }
     }
 
+
+    // 🟩 MODE MODIFICATION — FORMULAIRE ORIGINAL
+    // 🟢 Le mode création existant reste inchangé.
+    const modeModification =
+      params.get("mode") === "modifier";
+
+    const URL_LECTURE_PMR =
+      "https://zentyfamwemsyeqcbwle.supabase.co/functions/v1/" +
+      "load-pmr-accommodation-reference";
+
+    const URL_MODIFICATION_PMR =
+      "https://zentyfamwemsyeqcbwle.supabase.co/functions/v1/" +
+      "submit-pmr-accommodation-reference";
+
+    const gate = document.getElementById("pmrCodeGate");
+    const gateForm = document.getElementById("pmrCodeForm");
+    const gateInput = document.getElementById("pmrReferenceCode");
+    const gateMessage = document.getElementById("pmrCodeMessage");
+
+    let codeEnMemoire = "";
+    let amenagementsOriginaux = [];
+
+    const amenitiesCreation = [
+      "parking",
+      "restaurant",
+      "toilets",
+    ];
+
+    // 🟩 Affichage du bon mode.
+    if (modeModification) {
+      form.hidden = true;
+      gate.hidden = false;
+
+      const titre = document.querySelector(".hero h1");
+
+      if (titre) {
+        titre.textContent = "Modifier mon hébergement PMR";
+      }
+
+      const introduction = document.querySelector(".hero p");
+
+      if (introduction) {
+        introduction.textContent =
+          "Retrouvez votre hébergement avec votre code " +
+          "établissement, puis modifiez les informations " +
+          "du formulaire original.";
+      }
+    }
+
+    function afficherErreurCode(texte) {
+      gateMessage.textContent = texte;
+      gateMessage.className = "message error";
+    }
+
+    // 🟩 Préremplir exactement les champs de création.
+    function remplirFormulaireOriginal(fiche) {
+      const valeurs = {
+        title: fiche.title ?? "",
+        type: fiche.type ?? "",
+        contact_email: fiche.contact_email ?? "",
+        source_url: fiche.source_url ?? "",
+        latitude: fiche.latitude ?? "",
+        longitude: fiche.longitude ?? "",
+        comment: fiche.comment ?? "",
+      };
+
+      for (const [id, valeur] of Object.entries(valeurs)) {
+        const champ = document.getElementById(id);
+
+        if (champ) {
+          champ.value = valeur;
+        }
+      }
+
+      amenagementsOriginaux =
+        Array.isArray(fiche.amenities)
+          ? [...fiche.amenities]
+          : [];
+
+      // 🟩 Les trois choix du formulaire original.
+      for (const valeur of amenitiesCreation) {
+        const caseACocher = document.querySelector(
+          '#pmrForm input[name="amenities"][value="' +
+          valeur + '"]'
+        );
+
+        if (caseACocher) {
+          caseACocher.checked =
+            amenagementsOriginaux.includes(valeur);
+        }
+      }
+
+      // 🟢 Les autres aménagements historiques seront
+      // 🟢 conservés dans Supabase, sans effacement.
+      const autres = amenagementsOriginaux.filter(
+        valeur => !amenitiesCreation.includes(valeur)
+      );
+
+      if (autres.length > 0) {
+        const libelles = {
+          shelter: "Abri",
+          bait_shop: "Magasin d'appâts",
+          accommodation: "Hébergement",
+          wifi: "Wi-Fi",
+          electric_hookup: "Branchement électrique",
+        };
+
+        const texte = document.createElement("p");
+        texte.className = "hint";
+        texte.textContent =
+          "Autres aménagements enregistrés et conservés : " +
+          autres.map(v => libelles[v] ?? v).join(", ") + ".";
+
+        const derniereCase =
+          document.getElementById("amenity_toilets");
+
+        derniereCase?.closest("label")?.insertAdjacentElement(
+          "afterend", texte
+        );
+      }
+
+      // 🟩 Les cinq emplacements photo originaux restent.
+      // 🟢 Les photos existantes sont affichées sans réupload.
+      const photos =
+        Array.isArray(fiche.photos) ? fiche.photos : [];
+
+      for (let index = 1; index <= 5; index += 1) {
+        const champ = document.getElementById(
+          `photo_${index}`
+        );
+
+        if (!champ) continue;
+
+        // 🟢 Le serveur actuel ne remplace pas les photos.
+        champ.required = false;
+        champ.disabled = true;
+        champ.hidden = true;
+
+        const label = champ.labels?.[0];
+
+        if (label) {
+          label.textContent =
+            index === 1
+              ? "Photo de façade existante"
+              : `Photo intérieure ${index - 1} existante`;
+        }
+
+        const cadre = document.createElement("div");
+        cadre.className = "pmr-existing-photo";
+
+        const url = photos[index - 1];
+
+        if (
+          typeof url === "string" &&
+          /^https:\/\//i.test(url)
+        ) {
+          const image = document.createElement("img");
+          image.src = url;
+          image.alt = `Photo existante ${index}`;
+          image.loading = "lazy";
+          image.referrerPolicy = "no-referrer";
+          cadre.appendChild(image);
+        } else {
+          const absence = document.createElement("p");
+          absence.textContent = "Aucune photo enregistrée.";
+          cadre.appendChild(absence);
+        }
+
+        champ.insertAdjacentElement("afterend", cadre);
+      }
+
+      // 🟩 Le commentaire peut être vide sur une ancienne fiche.
+      document.getElementById("comment").required = false;
+
+      // 🟩 Confirmations spécifiques à une mise à jour directe.
+      const consentement =
+        document.getElementById("publication_consent");
+
+      const texteConsentement =
+        consentement?.closest("label")?.querySelector("span");
+
+      if (texteConsentement) {
+        texteConsentement.textContent =
+          "Je confirme vouloir enregistrer les modifications " +
+          "dans la fiche existante de mon hébergement.";
+      }
+
+      const aideEnvoi =
+        document.querySelector(".actions .hint");
+
+      if (aideEnvoi) {
+        aideEnvoi.textContent =
+          "Les modifications seront enregistrées " +
+          "dans votre fiche existante.";
+      }
+
+      const note = document.querySelector(".footer-note");
+
+      if (note) {
+        note.textContent =
+          "Votre hébergement conserve son identifiant, " +
+          "son statut et ses photos existantes.";
+      }
+
+      submitButton.textContent =
+        "Enregistrer mes modifications";
+
+      updateCounter();
+    }
+
+    // 🟩 Récupération de la fiche par code sécurisé.
+    gateForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      gateMessage.textContent = "";
+      gateMessage.className = "message";
+
+      const code = gateInput.value.trim();
+
+      if (!code) {
+        afficherErreurCode("Saisissez votre code établissement.");
+        return;
+      }
+
+      const bouton = gateForm.querySelector(
+        'button[type="submit"]'
+      );
+
+      bouton.disabled = true;
+      bouton.textContent = "Recherche en cours…";
+
+      try {
+        const response = await fetch(URL_LECTURE_PMR, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            referenceCode: code,
+          }),
+          cache: "no-store",
+        });
+
+        const data = await response.json().catch(() => null);
+
+        if (
+          !response.ok ||
+          data?.ok !== true ||
+          !data.establishment
+        ) {
+          throw new Error(
+            data?.message ??
+            "Impossible de retrouver votre établissement."
+          );
+        }
+
+        // 🟢 Les données viennent du serveur Supabase.
+        remplirFormulaireOriginal(data.establishment);
+
+        // 🟢 Le code ne figure jamais dans l'URL.
+        codeEnMemoire = code;
+        gateInput.value = "";
+
+        gate.hidden = true;
+        form.hidden = false;
+
+        setMessage(
+          "success",
+          "Fiche originale retrouvée. " +
+          "Vous pouvez modifier vos informations."
+        );
+
+      } catch (erreur) {
+        afficherErreurCode(
+          erreur instanceof Error
+            ? erreur.message
+            : "Erreur de connexion."
+        );
+
+      } finally {
+        bouton.disabled = false;
+        bouton.textContent = "Retrouver ma fiche";
+      }
+    });
+
+    // 🟩 Enregistrement sur la même fiche Supabase.
+    async function enregistrerModification() {
+      if (!codeEnMemoire) {
+        setMessage(
+          "error",
+          "Retrouvez d'abord votre fiche avec votre code."
+        );
+        return;
+      }
+
+      const lire = (id) =>
+        document.getElementById(id).value.trim();
+
+      const valeurLatitude = lire("latitude").replace(",", ".");
+      const valeurLongitude = lire("longitude").replace(",", ".");
+
+      // 🟩 Préserver les aménagements historiques
+      // 🟢 non proposés dans les trois cases de création.
+      const autres = amenagementsOriginaux.filter(
+        valeur => !amenitiesCreation.includes(valeur)
+      );
+
+      const coches = Array.from(
+        form.querySelectorAll(
+          'input[name="amenities"]:checked'
+        ),
+      ).map(champ => champ.value);
+
+      const changes = {
+        title: lire("title"),
+        type: lire("type"),
+        contact_email: lire("contact_email"),
+        source_url: lire("source_url"),
+        latitude: Number(valeurLatitude),
+        longitude: Number(valeurLongitude),
+        comment: lire("comment"),
+        amenities: [...new Set([...autres, ...coches])],
+      };
+
+      if (
+        !valeurLatitude ||
+        !valeurLongitude ||
+        !Number.isFinite(changes.latitude) ||
+        !Number.isFinite(changes.longitude)
+      ) {
+        setMessage("error", "Coordonnées GPS invalides.");
+        return;
+      }
+
+      if (
+        !document.getElementById("pmr_confirmed").checked ||
+        !document.getElementById("publication_consent").checked
+      ) {
+        setMessage(
+          "error",
+          "Veuillez cocher les deux confirmations."
+        );
+        return;
+      }
+
+      submitButton.disabled = true;
+      submitButton.textContent = "Enregistrement en cours…";
+
+      let reussite = false;
+
+      try {
+        const response = await fetch(URL_MODIFICATION_PMR, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            referenceCode: codeEnMemoire,
+            changes,
+            pmr_confirmed: true,
+            publication_consent: true,
+          }),
+          cache: "no-store",
+        });
+
+        const data = await response.json().catch(() => null);
+
+        if (!response.ok || data?.ok !== true) {
+          throw new Error(
+            data?.message ??
+            "Impossible d'enregistrer les modifications."
+          );
+        }
+
+        // 🟩 La fiche existante est mise à jour.
+        // 🟢 Aucun nouvel hébergement n'est créé.
+        reussite = true;
+        codeEnMemoire = "";
+
+        setMessage(
+          "success",
+          "Votre hébergement a été mis à jour. " +
+          "Les modifications sont enregistrées."
+        );
+
+      } catch (erreur) {
+        setMessage(
+          "error",
+          erreur instanceof Error
+            ? erreur.message
+            : "Erreur de connexion."
+        );
+
+      } finally {
+        submitButton.disabled = reussite;
+        submitButton.textContent = reussite
+          ? "Modifications enregistrées"
+          : "Enregistrer mes modifications";
+      }
+    }
+
     function setMessage(kind, text) {
       message.className = `message ${kind}`;
       message.textContent = text;
@@ -765,6 +1238,12 @@
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       clearMessage();
+
+      // 🟩 Modification : ne jamais appeler la création.
+      if (modeModification) {
+        await enregistrerModification();
+        return;
+      }
 
       // 🟩 Contrôle HTTPS avant l'envoi
       // 🟢 Évite une erreur technique si le site commence par http://.
