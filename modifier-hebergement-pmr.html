@@ -81,7 +81,7 @@
   <main>
     <p><a href="hebergements-pmr.html">← Retour aux hébergements PMR</a></p>
     <h1>Retrouver mon hébergement PMR</h1>
-    <p class="muted">Saisissez votre code établissement pour consulter votre fiche actuelle. Le formulaire de modification et son envoi seront activés après la mise en place de la validation administrative.</p>
+    <p class="muted">Saisissez votre code établissement pour consulter votre fiche actuelle. Vous pouvez proposer des corrections, qui seront examinées avant toute mise à jour de la fiche.</p>
 
     <!-- 🟩 Lecture de la fiche par code, jamais par UUID fourni par l'utilisateur. -->
     <section class="card" aria-label="Accès à mon hébergement">
@@ -101,8 +101,8 @@
     <section id="ficheSection" class="card" hidden aria-label="Fiche actuelle de l'hébergement">
       <h2>Ma fiche actuelle</h2>
       <p id="statutFiche" class="muted"></p>
-      <p class="notice">Consultation uniquement pour le moment : aucune correction n'est enregistrée depuis cette page.</p>
-      <fieldset disabled>
+      <p class="notice">Proposez vos corrections ci-dessous. Elles seront examinées avant toute modification de votre fiche publiée.</p>
+      <fieldset>
         <div class="grid">
           <div class="full">
             <label for="editTitle">Nom de l'établissement</label>
@@ -145,7 +145,30 @@
       </fieldset>
       <h2 style="margin-top:24px">Photos existantes</h2>
       <div id="photos" class="photos"></div>
-      <p><button type="button" disabled>Enregistrement des modifications à venir</button></p>
+      <!-- 🟩 Confirmations obligatoires avant l'envoi. -->
+      <p>
+        <label>
+          <input id="pmrConfirmed" type="checkbox" />
+          Je confirme que cet hébergement propose bien des aménagements accessibles aux personnes à mobilité réduite.
+        </label>
+      </p>
+      <p>
+        <label>
+          <input id="publicationConsent" type="checkbox" />
+          J'autorise l'examen de mes corrections en vue de leur publication après vérification.
+        </label>
+      </p>
+
+      <!-- 🟩 Une demande, jamais une modification directe de la fiche. -->
+      <p>
+        <button id="submitChangesButton" type="button">
+          Envoyer ma demande de modification
+        </button>
+      </p>
+      <p id="submitChangesMessage"
+         class="message"
+         role="status"
+         aria-live="polite"></p>
     </section>
   </main>
 
@@ -154,6 +177,12 @@
     const EDGE_URL =
       "https://zentyfamwemsyeqcbwle.supabase.co/functions/v1/" +
       "load-pmr-accommodation-reference";
+
+    // 🟩 Envoi de la proposition de modification.
+    // 🟢 Ne modifie jamais directement nearby_places.
+    const SUBMIT_EDGE_URL =
+      "https://zentyfamwemsyeqcbwle.supabase.co/functions/v1/" +
+      "submit-pmr-accommodation-reference";
 
     // 🟩 Noms en français basés sur l'enum public.amenity_type.
     const AMENAGEMENTS = [
@@ -172,6 +201,9 @@
     const button = document.getElementById("loadButton");
     const message = document.getElementById("message");
     const section = document.getElementById("ficheSection");
+    const envoyerButton = document.getElementById("submitChangesButton");
+    const messageEnvoi = document.getElementById("submitChangesMessage");
+    let codeCharge = "";
 
     function afficherMessage(texte, type = "") {
       message.textContent = texte; // 🟢 Pas d'injection HTML.
@@ -207,7 +239,7 @@
         const caseACocher = document.createElement("input");
         caseACocher.type = "checkbox";
         caseACocher.checked = valeurs.has(valeur);
-        caseACocher.disabled = true;
+        caseACocher.value = valeur; // 🟢 Valeur Supabase existante.
         label.append(caseACocher, document.createTextNode(libelle));
         amenagements.appendChild(label);
       }
@@ -240,9 +272,154 @@
       }
     }
 
+
+    // 🟩 ENVOI DE LA DEMANDE DE MODIFICATION PMR
+    // 🟢 La proposition sera enregistrée pending.
+    // 🟢 Aucun UPDATE de la fiche existante.
+    envoyerButton.addEventListener("click", async () => {
+      messageEnvoi.textContent = "";
+      messageEnvoi.className = "message";
+
+      if (!codeCharge || section.hidden) {
+        messageEnvoi.textContent =
+          "Retrouvez d'abord votre fiche avec votre code établissement.";
+        messageEnvoi.className = "message error";
+        return;
+      }
+
+      // 🟩 Consentements explicites
+      if (!document.getElementById("pmrConfirmed").checked ||
+          !document.getElementById("publicationConsent").checked) {
+        messageEnvoi.textContent =
+          "Veuillez confirmer l'accessibilité et autoriser l'examen de votre demande.";
+        messageEnvoi.className = "message error";
+        return;
+      }
+
+      const champ = (id) =>
+        document.getElementById(id).value.trim();
+
+      const latitudeTexte = champ("editLatitude").replace(",", ".");
+      const longitudeTexte = champ("editLongitude").replace(",", ".");
+      const latitude = Number(latitudeTexte);
+      const longitude = Number(longitudeTexte);
+
+      // 🟩 Reprendre exactement les huit champs autorisés.
+      const changes = {
+        title: champ("editTitle"),
+        type: champ("editType"),
+        contact_email: champ("editEmail"),
+        source_url: champ("editWebsite"),
+        latitude,
+        longitude,
+        comment: champ("editComment"),
+        amenities: Array.from(
+          document.querySelectorAll('#amenities input[type="checkbox"]:checked'),
+        ).map((caseACocher) => caseACocher.value),
+      };
+
+      if (!changes.title || !changes.type ||
+          !changes.contact_email || !changes.source_url ||
+          !changes.comment) {
+        messageEnvoi.textContent =
+          "Complétez les informations obligatoires.";
+        messageEnvoi.className = "message error";
+        return;
+      }
+
+      if (!document.getElementById("editEmail").checkValidity()) {
+        messageEnvoi.textContent = "L'adresse e-mail est invalide.";
+        messageEnvoi.className = "message error";
+        return;
+      }
+
+      try {
+        const url = new URL(changes.source_url);
+        if (url.protocol !== "https:" || !url.hostname.includes(".")) {
+          throw new Error("Adresse HTTPS invalide.");
+        }
+      } catch (_) {
+        messageEnvoi.textContent =
+          "Renseignez une adresse de site web HTTPS valide.";
+        messageEnvoi.className = "message error";
+        return;
+      }
+
+      if (!latitudeTexte || !longitudeTexte ||
+          !Number.isFinite(latitude) ||
+          !Number.isFinite(longitude) ||
+          latitude < -90 || latitude > 90 ||
+          longitude < -180 || longitude > 180) {
+        messageEnvoi.textContent =
+          "Vérifiez les coordonnées GPS.";
+        messageEnvoi.className = "message error";
+        return;
+      }
+
+      // 🟩 Protection contre plusieurs clics simultanés.
+      envoyerButton.disabled = true;
+      envoyerButton.textContent = "Envoi en cours…";
+
+      let demandeEnvoyee = false;
+
+      try {
+        const reponse = await fetch(SUBMIT_EDGE_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            referenceCode: codeCharge,
+            changes,
+            pmr_confirmed: true,
+            publication_consent: true,
+          }),
+          cache: "no-store",
+        });
+
+        const resultat = await reponse.json().catch(() => null);
+
+        if (!reponse.ok || resultat?.ok !== true) {
+          throw new Error(
+            typeof resultat?.message === "string"
+              ? resultat.message
+              : "Impossible d'enregistrer votre demande.",
+          );
+        }
+
+        // 🟩 Demande enregistrée.
+        // 🟢 La fiche n'est pas encore modifiée.
+        // 🟢 Le code temporaire n'est plus nécessaire.
+        codeCharge = "";
+        demandeEnvoyee = true;
+        messageEnvoi.textContent =
+          "Votre demande de modification a été enregistrée. " +
+          "Elle sera vérifiée avant toute application.";
+        messageEnvoi.className = "message success";
+
+      } catch (erreur) {
+        // 🟢 Le backend retourne notamment HTTP 409
+        // 🟢 lorsqu'une autre demande pending existe.
+        messageEnvoi.textContent =
+          erreur instanceof Error
+            ? erreur.message
+            : "Erreur de connexion.";
+        messageEnvoi.className = "message error";
+
+      } finally {
+        envoyerButton.disabled = demandeEnvoyee;
+        envoyerButton.textContent = demandeEnvoyee
+          ? "Demande envoyée"
+          : "Envoyer ma demande de modification";
+      }
+    });
+
     form.addEventListener("submit", async (evenement) => {
       evenement.preventDefault();
       section.hidden = true;
+      codeCharge = "";
+      envoyerButton.disabled = false;
+      envoyerButton.textContent = "Envoyer ma demande de modification";
+      messageEnvoi.textContent = "";
+      messageEnvoi.className = "message";
       afficherMessage("");
       const referenceCode = codeInput.value.trim();
       if (!referenceCode) {
@@ -268,9 +445,10 @@
           );
         }
         remplirFiche(resultat.establishment);
+        codeCharge = referenceCode; // 🟢 Mémoire temporaire uniquement.
         codeInput.value = ""; // 🟢 Aucun code stocké sur la page après lecture.
         section.hidden = false;
-        afficherMessage("Fiche retrouvée. Consultation sécurisée active.", "success");
+        afficherMessage("Fiche retrouvée. Vous pouvez proposer une modification.", "success");
       } catch (erreur) {
         afficherMessage(
           erreur instanceof Error ? erreur.message : "Erreur de connexion.",
