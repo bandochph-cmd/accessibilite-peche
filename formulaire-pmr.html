@@ -433,6 +433,135 @@
       color: var(--muted);
     }
 
+    /* 🟩 ZZZ_GALERIE_PHOTOS_HEB_20261118 */
+    /* 🟢 Galerie limitée au formulaire de modification. */
+    /* 🟩 ZZZ_GRANDES_TUILES_PHOTOS_20261118 */
+    /* 🟢 Deux grandes tuiles par ligne sur ordinateur. */
+    .pmr-photos-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px; /* 🟢 écart modifiable */
+      overflow: visible;
+      padding: 12px 2px; /* 🟢 modifiable */
+      margin: 10px 0 18px; /* 🟢 modifiable */
+      grid-column: 1 / -1;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+
+    /* 🟩 Sur téléphone : une grande tuile par ligne. */
+    @media (max-width: 620px) {
+      .pmr-photos-gallery {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 12px; /* 🟢 modifiable */
+      }
+    }
+
+    .pmr-photo-slot {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      padding: 14px; /* 🟢 modifiable */
+      border: 1px solid var(--border);
+      border-radius: 12px; /* 🟢 modifiable */
+      background: var(--background);
+      box-sizing: border-box;
+    }
+
+    /* 🟩 Sélecteur directement dans sa tuile photo. */
+    .pmr-photo-slot .field {
+      display: block;
+      width: 100%;
+      min-width: 0;
+      margin: 0 0 12px; /* 🟢 modifiable */
+    }
+
+    /* 🟢 Le titre de la tuile remplace le libellé répété. */
+    .pmr-photo-slot .field > label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    /* 🟢 Aides répétées masquées en mode modification. */
+    .pmr-photo-slot .field .hint {
+      display: none;
+    }
+
+    /* 🟩 Garder le bouton de sélection accessible. */
+    .pmr-photo-slot input[type="file"] {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+      font-size: .80rem; /* 🟢 modifiable */
+    }
+
+    .pmr-photo-slot .pmr-photo-version img {
+      height: 175px; /* 🟢 hauteur des photos modifiable */
+      object-fit: contain;
+    }
+
+    .pmr-photo-slot .pmr-photo-version p {
+      overflow-wrap: normal;
+      word-break: normal;
+      font-size: .80rem; /* 🟢 modifiable */
+    }
+
+    .pmr-photo-slot-title {
+      font-size: .82rem; /* 🟢 modifiable */
+      font-weight: 700;
+      margin: 0 0 8px;
+      text-align: center;
+    }
+
+    .pmr-photo-comparison {
+      display: flex;
+      gap: 5px; /* 🟢 modifiable */
+      align-items: flex-start;
+    }
+
+    .pmr-photo-version {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .pmr-photo-version img {
+      display: block;
+      width: 100%;
+      height: 110px; /* 🟢 modifiable */
+      object-fit: contain;
+      border-radius: 5px; /* 🟢 modifiable */
+      background: #ffffff; /* 🟢 modifiable */
+    }
+
+    .pmr-photo-version p {
+      margin: 4px 0;
+      font-size: .72rem; /* 🟢 modifiable */
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+      text-align: center;
+    }
+
+    .pmr-photo-new-label {
+      color: var(--primary-dark);
+      font-weight: 700;
+    }
+
+    .pmr-photo-gallery-help {
+      font-size: .85rem; /* 🟢 modifiable */
+      margin: 6px 0 4px;
+      color: var(--muted);
+    }
+
     /* 🟩 ZZZ_PMR_HABILLAGE_20261116 — visuel isolé */
     .zzz-official {
       --zzz-blue: #0d4f8b; /* 🟢 modifiable */
@@ -1458,10 +1587,34 @@
         );
       }
 
-      // 🟩 Les cinq emplacements photo originaux restent.
-      // 🟢 Les photos existantes sont affichées sans réupload.
+      // 🟩 ZZZ_GALERIE_PHOTOS_HEB_20261118
+      // 🟢 Affichage des cinq photos dans l'ordre :
+      // 🟢 façade, intérieur 1, intérieur 2, intérieur 3, intérieur 4.
+      // 🟢 Les nouvelles sélections sont visibles avant envoi.
+      // 🟢 Les anciennes photos restent visibles pour comparaison.
       const photos =
         Array.isArray(fiche.photos) ? fiche.photos : [];
+
+      // 🟩 Éviter une deuxième galerie si la fiche est rechargée.
+      document.getElementById("pmrPhotosGallery")?.remove();
+
+      const galerie = document.createElement("div");
+      galerie.id = "pmrPhotosGallery";
+      galerie.className = "pmr-photos-gallery";
+      galerie.setAttribute(
+        "aria-label",
+        "Aperçu des cinq photos de l'établissement"
+      );
+
+      // 🟩 Installer la galerie avant de déplacer les champs.
+      // 🟢 Ne modifie pas les données du formulaire.
+      const emplacementGalerie =
+        document.getElementById("photo_1")?.closest(".field");
+
+      emplacementGalerie?.insertAdjacentElement(
+        "beforebegin",
+        galerie
+      );
 
       for (let index = 1; index <= 5; index += 1) {
         const champ = document.getElementById(
@@ -1470,43 +1623,149 @@
 
         if (!champ) continue;
 
-        // 🟢 Le serveur actuel ne remplace pas les photos.
+        // 🟩 Les champs de sélection restent accessibles.
+        // 🟢 Photo 1 facultative si la fiche possède déjà une photo.
         champ.required = false;
-        champ.disabled = true;
-        champ.hidden = true;
+        champ.disabled = false;
+        champ.hidden = false;
 
         const label = champ.labels?.[0];
 
         if (label) {
           label.textContent =
             index === 1
-              ? "Photo de façade existante"
-              : `Photo intérieure ${index - 1} existante`;
+              ? "Photo de façade"
+              : `Photo intérieure ${index - 1}`;
         }
 
-        const cadre = document.createElement("div");
-        cadre.className = "pmr-existing-photo";
+        // 🟩 Tuile correspondant à un emplacement.
+        const tuile = document.createElement("div");
+        tuile.className = "pmr-photo-slot";
 
-        const url = photos[index - 1];
+        const titre = document.createElement("p");
+        titre.className = "pmr-photo-slot-title";
+        titre.textContent =
+          index === 1
+            ? "Façade"
+            : `Intérieur ${index - 1}`;
+
+        tuile.appendChild(titre);
+
+        const comparaison = document.createElement("div");
+        comparaison.className = "pmr-photo-comparison";
+
+        // 🟩 Photo actuellement enregistrée dans Supabase.
+        const ancienneZone = document.createElement("div");
+        ancienneZone.className = "pmr-photo-version";
+
+        const ancienneEtiquette = document.createElement("p");
+        ancienneEtiquette.textContent = "Enregistrée";
+
+        ancienneZone.appendChild(ancienneEtiquette);
+
+        const urlExistante = photos[index - 1];
 
         if (
-          typeof url === "string" &&
-          /^https:\/\//i.test(url)
+          typeof urlExistante === "string" &&
+          /^https:\/\//i.test(urlExistante)
         ) {
-          const image = document.createElement("img");
-          image.src = url;
-          image.alt = `Photo existante ${index}`;
-          image.loading = "lazy";
-          image.referrerPolicy = "no-referrer";
-          cadre.appendChild(image);
+          const ancienneImage = document.createElement("img");
+          ancienneImage.src = urlExistante;
+          ancienneImage.alt =
+            `Photo ${index} actuellement enregistrée`;
+          ancienneImage.loading = "lazy";
+          ancienneImage.referrerPolicy = "no-referrer";
+          ancienneZone.appendChild(ancienneImage);
+
         } else {
           const absence = document.createElement("p");
-          absence.textContent = "Aucune photo enregistrée.";
-          cadre.appendChild(absence);
+          absence.textContent = "Aucune photo";
+          ancienneZone.appendChild(absence);
         }
 
-        champ.insertAdjacentElement("afterend", cadre);
+        comparaison.appendChild(ancienneZone);
+
+        // 🟩 Emplacement d'aperçu d'une nouvelle photo.
+        const nouvelleZone = document.createElement("div");
+        nouvelleZone.className = "pmr-photo-version";
+        nouvelleZone.hidden = true;
+
+        const nouvelleEtiquette = document.createElement("p");
+        nouvelleEtiquette.className = "pmr-photo-new-label";
+        nouvelleEtiquette.textContent =
+          "Nouvelle — non enregistrée";
+
+        const nouvelleImage = document.createElement("img");
+        nouvelleImage.alt =
+          `Nouvelle photo sélectionnée pour l'emplacement ${index}`;
+
+        nouvelleZone.appendChild(nouvelleEtiquette);
+        nouvelleZone.appendChild(nouvelleImage);
+        comparaison.appendChild(nouvelleZone);
+
+        // 🟩 Déplacer le sélecteur existant dans la tuile.
+        // 🟢 Conserver ses id, name et événements JavaScript.
+        const blocPhoto = champ.closest(".field");
+
+        if (blocPhoto) {
+          tuile.appendChild(blocPhoto);
+        }
+
+        tuile.appendChild(comparaison);
+        galerie.appendChild(tuile);
+
+        // 🟩 Afficher immédiatement la photo sélectionnée.
+        // 🟢 URL locale provisoire, sans envoi à Supabase.
+        let urlApercu = null;
+
+        champ.addEventListener("change", () => {
+          if (urlApercu) {
+            URL.revokeObjectURL(urlApercu);
+            urlApercu = null;
+          }
+
+          const fichier = champ.files?.[0];
+
+          if (!fichier) {
+            nouvelleImage.removeAttribute("src");
+            nouvelleZone.hidden = true;
+            return;
+          }
+
+          // 🟢 Vérification visuelle avant prévisualisation.
+          const formats = [
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+          ];
+
+          // 🟢 Limite de taille modifiable : 5 Mo.
+          if (
+            !formats.includes(fichier.type) ||
+            fichier.size > 5 * 1024 * 1024
+          ) {
+            nouvelleImage.removeAttribute("src");
+            nouvelleZone.hidden = true;
+            return;
+          }
+
+          urlApercu = URL.createObjectURL(fichier);
+          nouvelleImage.src = urlApercu;
+          nouvelleZone.hidden = false;
+        });
+
+        // 🟢 Libérer la mémoire de l'aperçu à la fermeture.
+        window.addEventListener("pagehide", () => {
+          if (urlApercu) {
+            URL.revokeObjectURL(urlApercu);
+            urlApercu = null;
+          }
+        }, { once: true });
       }
+
+      // 🟩 Galerie et sélecteurs intégrés aux cinq tuiles.
+      // 🟢 Tous les champs sont toujours dans le même formulaire.
+      // 🟢 Aucun téléchargement déclenché par l'affichage.
 
       // 🟩 Le commentaire peut être vide sur une ancienne fiche.
       document.getElementById("comment").required = false;
@@ -1733,19 +1992,72 @@
       let reussite = false;
 
       try {
-        const response = await fetch(URL_MODIFICATION_PMR, {
+        // 🟩 Transmission des photos modifiées uniquement.
+        // 🟢 Maximum : 5 photos, 5 Mo chacune — modifiable.
+        // 🟢 Aucun fichier sélectionné : conserver le JSON existant.
+        const fichiersPhotos = [];
+
+        for (let numero = 1; numero <= 5; numero += 1) {
+          const fichier = document.getElementById(
+            `photo_${numero}`
+          )?.files?.[0];
+
+          if (!fichier) continue;
+
+          if (![
+            "image/jpeg",
+            "image/png",
+            "image/webp",
+          ].includes(fichier.type)) {
+            throw new Error(
+              `Photo ${numero} : format JPG, PNG ou WEBP requis.`
+            );
+          }
+
+          if (fichier.size > 5 * 1024 * 1024) {
+            throw new Error(
+              `Photo ${numero} : maximum 5 Mo.`
+            );
+          }
+
+          fichiersPhotos.push([numero, fichier]);
+        }
+
+        const options = {
           method: "POST",
-          headers: {
+          cache: "no-store",
+        };
+
+        if (fichiersPhotos.length > 0) {
+          // 🟢 Laisser le navigateur définir le multipart boundary.
+          const contenu = new FormData();
+          contenu.set("referenceCode", codeEnMemoire);
+          contenu.set("changes", JSON.stringify(changes));
+          contenu.set("pmr_confirmed", "true");
+          contenu.set("publication_consent", "true");
+
+          for (const [numero, fichier] of fichiersPhotos) {
+            contenu.set(`photo_${numero}`, fichier);
+          }
+
+          options.body = contenu;
+        } else {
+          // 🟢 Comportement JSON précédemment validé conservé.
+          options.headers = {
             "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+          };
+          options.body = JSON.stringify({
             referenceCode: codeEnMemoire,
             changes,
             pmr_confirmed: true,
             publication_consent: true,
-          }),
-          cache: "no-store",
-        });
+          });
+        }
+
+        const response = await fetch(
+          URL_MODIFICATION_PMR,
+          options
+        );
 
         const data = await response.json().catch(() => null);
 
