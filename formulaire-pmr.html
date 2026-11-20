@@ -1669,11 +1669,15 @@
 
         const urlExistante = photos[index - 1];
 
+        // 🟢 Référence conservée hors du bloc afin que le bouton
+        // 🟢 de suppression puisse agir sur l'image enregistrée.
+        let ancienneImage = null;
+
         if (
           typeof urlExistante === "string" &&
           /^https:\/\//i.test(urlExistante)
         ) {
-          const ancienneImage = document.createElement("img");
+          ancienneImage = document.createElement("img");
           ancienneImage.src = urlExistante;
           ancienneImage.alt =
             `Photo ${index} actuellement enregistrée`;
