@@ -1484,6 +1484,10 @@
     let codeEnMemoire = "";
     let amenagementsOriginaux = [];
 
+    // 🟩 Photos existantes marquées pour suppression.
+    // 🟢 Aucun fichier n'est supprimé avant "Enregistrer mes modifications".
+    const photosASupprimer = new Set();
+
     const amenitiesCreation = [
       "parking",
       "restaurant",
@@ -1703,6 +1707,59 @@
         nouvelleZone.appendChild(nouvelleImage);
         comparaison.appendChild(nouvelleZone);
 
+        // 🟩 Suppression volontaire d'une photo déjà enregistrée.
+        // 🟢 La suppression reste réversible jusqu'à la sauvegarde.
+        let suppressionActive = false;
+        let boutonSuppression = null;
+
+        if (
+          typeof urlExistante === "string" &&
+          /^https:\/\//i.test(urlExistante)
+        ) {
+          boutonSuppression = document.createElement("button");
+          boutonSuppression.type = "button";
+          boutonSuppression.textContent = "✕ Supprimer la photo";
+          boutonSuppression.style.marginTop = "8px";
+          boutonSuppression.style.padding = "7px 10px";
+          boutonSuppression.style.border = "1px solid #b91c1c";
+          boutonSuppression.style.borderRadius = "8px";
+          boutonSuppression.style.background = "#ffffff";
+          boutonSuppression.style.color = "#991b1b";
+          boutonSuppression.style.cursor = "pointer";
+          boutonSuppression.style.fontWeight = "700";
+
+          boutonSuppression.addEventListener("click", () => {
+            suppressionActive = !suppressionActive;
+
+            if (suppressionActive) {
+              photosASupprimer.add(index);
+
+              // 🟢 Une suppression sans remplacement doit être possible.
+              champ.value = "";
+
+              if (urlApercu) {
+                URL.revokeObjectURL(urlApercu);
+                urlApercu = null;
+              }
+
+              nouvelleImage.removeAttribute("src");
+              nouvelleZone.hidden = true;
+
+              ancienneImage.style.opacity = "0.28";
+              ancienneEtiquette.textContent = "À supprimer";
+              boutonSuppression.textContent = "↶ Annuler la suppression";
+            } else {
+              photosASupprimer.delete(index);
+
+              ancienneImage.style.opacity = "1";
+              ancienneEtiquette.textContent = "Enregistrée";
+              boutonSuppression.textContent = "✕ Supprimer la photo";
+            }
+          });
+
+          ancienneZone.appendChild(boutonSuppression);
+        }
+
         // 🟩 Déplacer le sélecteur existant dans la tuile.
         // 🟢 Conserver ses id, name et événements JavaScript.
         const blocPhoto = champ.closest(".field");
@@ -1749,6 +1806,20 @@
             return;
           }
 
+          // 🟢 Une nouvelle photo remplace l'ancienne :
+          // 🟢 annuler une éventuelle suppression demandée.
+          if (suppressionActive) {
+            suppressionActive = false;
+            photosASupprimer.delete(index);
+
+            ancienneImage.style.opacity = "1";
+            ancienneEtiquette.textContent = "Enregistrée";
+
+            if (boutonSuppression) {
+              boutonSuppression.textContent = "✕ Supprimer la photo";
+            }
+          }
+
           urlApercu = URL.createObjectURL(fichier);
           nouvelleImage.src = urlApercu;
           nouvelleZone.hidden = false;
@@ -1767,8 +1838,10 @@
       // 🟢 Tous les champs sont toujours dans le même formulaire.
       // 🟢 Aucun téléchargement déclenché par l'affichage.
 
-      // 🟩 Le commentaire peut être vide sur une ancienne fiche.
-      document.getElementById("comment").required = false;
+      // 🟩 Description PMR obligatoire aussi en modification.
+      // 🟢 Une ancienne fiche sans description doit être complétée
+      // 🟢 avant de pouvoir enregistrer une nouvelle modification.
+      document.getElementById("comment").required = true;
 
       // 🟩 Confirmations spécifiques à une mise à jour directe.
       const consentement =
@@ -1997,6 +2070,10 @@
         // 🟢 Aucun fichier sélectionné : conserver le JSON existant.
         const fichiersPhotos = [];
 
+        // 🟢 Positions 1 à 5 demandées en suppression.
+        const suppressionsPhotos =
+          Array.from(photosASupprimer).sort((a, b) => a - b);
+
         for (let numero = 1; numero <= 5; numero += 1) {
           const fichier = document.getElementById(
             `photo_${numero}`
@@ -2028,13 +2105,22 @@
           cache: "no-store",
         };
 
-        if (fichiersPhotos.length > 0) {
+        if (
+          fichiersPhotos.length > 0 ||
+          suppressionsPhotos.length > 0
+        ) {
           // 🟢 Laisser le navigateur définir le multipart boundary.
           const contenu = new FormData();
           contenu.set("referenceCode", codeEnMemoire);
           contenu.set("changes", JSON.stringify(changes));
           contenu.set("pmr_confirmed", "true");
           contenu.set("publication_consent", "true");
+
+          // 🟢 Suppressions demandées, sans URL fournie par le navigateur.
+          contenu.set(
+            "delete_photos",
+            JSON.stringify(suppressionsPhotos)
+          );
 
           for (const [numero, fichier] of fichiersPhotos) {
             contenu.set(`photo_${numero}`, fichier);
@@ -2049,6 +2135,7 @@
           options.body = JSON.stringify({
             referenceCode: codeEnMemoire,
             changes,
+            delete_photos: suppressionsPhotos,
             pmr_confirmed: true,
             publication_consent: true,
           });
