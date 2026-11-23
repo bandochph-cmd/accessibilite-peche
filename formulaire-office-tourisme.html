@@ -1138,7 +1138,7 @@
         </div>
         <p><button id="loadButton" type="submit">Retrouver ma fiche</button></p>
       </form>
-      <p><a href="mailto:contact@accessibilite-peche.fr?subject=Code%20office%20de%20tourisme">
+      <p><a href="recuperation-code-hebergement-pmr.html?mode=office">
         J'ai perdu mon code
       </a></p>
       <p id="lookupMessage" class="message" role="status" aria-live="polite"></p>
@@ -1388,6 +1388,10 @@ const api = "https://zentyfamwemsyeqcbwle.supabase.co/functions/v1/";
 const loadUrl = api + "load-tourism-office-reference";
 const submitUrl = api + "submit-tourism-office-reference";
 
+// 🟩 Endpoint dédié aux nouveaux offices.
+// 🟢 Adresse fonctionnelle modifiable si la fonction est renommée.
+const createUrl = api + "create-tourism-office-reference";
+
 // 🟩 CLÉ PUBLIQUE SUPABASE
 // 🟢 Clé publiable utilisée par le formulaire — modifiable.
 const officePublishableKey = "sb_publishable_pqCWdjuUr2yiVOEg90o7wQ_fG9w27nf";
@@ -1423,13 +1427,33 @@ if (!modeOfficeCreation) {
   if (introOffice) introOffice.textContent =
     "Retrouvez votre office avec votre code établissement, puis modifiez les informations de votre fiche existante.";
 } else {
-  // 🟢 Formulaire vierge visible seulement pour les tests locaux.
-  // 🟢 Ne jamais envoyer une création vers la fonction de modification.
+  // 🟩 CRÉATION — Utiliser uniquement le nouveau backend.
+  // 🟢 Aucun code établissement demandé avant la création.
   officeGate.hidden = true;
   form.classList.remove("office-hidden");
-  btnSend.disabled = true;
-  btnSend.textContent = "Création en préparation";
-  if (titreOffice) titreOffice.textContent = "Créer mon office de tourisme PMR";
+  btnSend.disabled = false;
+  btnSend.textContent = "Envoyer votre demande";
+
+  if (titreOffice) {
+    titreOffice.textContent = "Créer mon office de tourisme PMR";
+  }
+
+  // 🟩 Adapter les confirmations au mode création uniquement.
+  const confirmation =
+    document.querySelector("#information_confirmed + span");
+
+  if (confirmation) {
+    confirmation.textContent =
+      "Je confirme vouloir créer la fiche de mon office de tourisme. *";
+  }
+
+  const consentementPhoto =
+    document.querySelector("#photo_consent + span");
+
+  if (consentementPhoto) {
+    consentementPhoto.textContent =
+      "J'autorise l'utilisation de la photo transmise. *";
+  }
 }
 
 
@@ -1560,7 +1584,7 @@ document.getElementById("officeCodeForm").addEventListener("submit", async event
 form.addEventListener("submit", async e => {
   e.preventDefault();
 
-  if (!codeActif || termine || btnSend.disabled || !form.reportValidity()) {
+  if ((!modeOfficeCreation && !codeActif) || termine || btnSend.disabled || !form.reportValidity()) {
     return;
   }
 
@@ -1634,8 +1658,13 @@ form.addEventListener("submit", async e => {
   try {
     const corps = new FormData(form);
 
-    // 🟢 Code transmis dans le corps, jamais dans l'URL.
-    corps.set("code", codeActif);
+    // 🟩 Le code n'est requis que pour modifier une fiche.
+    // 🟢 En création, le serveur génère un nouveau code sécurisé.
+    if (!modeOfficeCreation) {
+      corps.set("code", codeActif);
+    } else {
+      corps.delete("code");
+    }
     corps.set("latitude", String(lat));
     corps.set("longitude", String(lon));
     corps.set("pmr_status", pmr.value);
@@ -1665,7 +1694,8 @@ form.addEventListener("submit", async e => {
       );
     }
 
-    const rep = await fetch(submitUrl, {
+    // 🟩 Choisir le bon backend sans modifier le parcours existant.
+const rep = await fetch(modeOfficeCreation ? createUrl : submitUrl, {
       method: "POST",
       // 🟩 AUTHENTIFICATION PUBLIQUE SUPABASE
       headers: {"apikey": officePublishableKey},
@@ -1687,9 +1717,35 @@ form.addEventListener("submit", async e => {
       resultat.message || "Informations enregistrées. Merci."
     );
 
-    code.readOnly = true;
-    btnLoad.disabled = true;
-    btnSend.textContent = "Informations envoyées";
+    if (modeOfficeCreation) {
+      // 🟩 Afficher le code établissement après création réussie.
+      // 🟢 Ne jamais placer le code dans l'URL.
+      // 🟢 Utiliser textContent pour éviter toute injection HTML.
+      const codeNouveau =
+        typeof resultat.referenceCode === "string"
+          ? resultat.referenceCode
+          : "";
+
+      const detail = document.createElement("p");
+      detail.style.marginTop = "10px"; // 🟢 Marge modifiable.
+
+      detail.textContent = codeNouveau
+        ? "Votre code établissement : " + codeNouveau +
+          " — Conservez-le confidentiellement. " +
+          "Un e-mail de confirmation est prévu à l'adresse de l'office."
+        : "Office enregistré, mais code non affiché. " +
+          "Ne renvoyez pas le formulaire : contactez le support.";
+
+      document.getElementById("submitMessage").appendChild(detail);
+    } else {
+      // 🟢 Parcours Modifier conservé.
+      code.readOnly = true;
+      btnLoad.disabled = true;
+    }
+
+    btnSend.textContent = modeOfficeCreation
+      ? "Office enregistré"
+      : "Informations envoyées";
 
   } catch (e) {
     message(
@@ -1699,7 +1755,9 @@ form.addEventListener("submit", async e => {
     );
 
     btnSend.disabled = false;
-    btnSend.textContent = "Envoyer les informations";
+    btnSend.textContent = modeOfficeCreation
+      ? "Envoyer votre demande"
+      : "Envoyer les informations";
   }
 });
 </script>

@@ -336,8 +336,29 @@
       "use strict";
 
       // 🟢 URL du service indépendant (modifiable si projet changé).
-      const EDGE_URL =
-        "https://zentyfamwemsyeqcbwle.supabase.co/functions/v1/recover-pmr-accommodation-code";
+      // 🟩 Mode Office activé uniquement par ?mode=office.
+      // 🟢 Sans ce paramètre, les hébergements restent inchangés.
+      const modeOfficeRecuperation =
+        new URLSearchParams(window.location.search).get("mode") === "office";
+
+      // 🟢 Endpoint distinct selon la catégorie (modifiable).
+      const EDGE_URL = modeOfficeRecuperation
+        ? "https://zentyfamwemsyeqcbwle.supabase.co/functions/v1/recover-tourism-office-code"
+        : "https://zentyfamwemsyeqcbwle.supabase.co/functions/v1/recover-pmr-accommodation-code";
+
+      // 🟩 Adapter uniquement les explications en mode Office.
+      if (modeOfficeRecuperation) {
+        const explication =
+          document.querySelector("#demandeSection .explication");
+
+        if (explication) {
+          explication.textContent =
+            "Indiquez le nom exact de votre office de tourisme " +
+            "et l'adresse e-mail utilisée lors de son référencement. " +
+            "Si les informations correspondent, vous recevrez " +
+            "un lien sécurisé valable 15 minutes.";
+        }
+      }
 
       const demandeSection =
         document.getElementById("demandeSection");
@@ -503,10 +524,13 @@
               ? resultat.codeEtablissement.trim()
               : "";
 
-          // 🟢 Contrat du code HEB existant.
-          if (!/^HEB-(?:[A-HJ-NP-Z2-9]{4}-){3}[A-HJ-NP-Z2-9]{4}$/.test(
-            nouveauCode,
-          )) {
+          // 🟩 Vérification du format propre à chaque catégorie.
+          // 🟢 HEB conservé ; OT uniquement en mode Office.
+          const formatCode = modeOfficeRecuperation
+            ? /^OT-(?:[A-HJ-NP-Z2-9]{4}-){3}[A-HJ-NP-Z2-9]{4}$/
+            : /^HEB-(?:[A-HJ-NP-Z2-9]{4}-){3}[A-HJ-NP-Z2-9]{4}$/;
+
+          if (!formatCode.test(nouveauCode)) {
             throw new Error("Réponse de renouvellement incomplète.");
           }
 
